@@ -20,7 +20,11 @@ namespace S10256965_PRG2Assignment
         {
             WaffleFlavour = waffleFlavour;
         }
-        public override double CalculatePrice() { }
+        public override double CalculatePrice() 
+        {
+            // TODO
+            return 0;
+        }
         public override string ToString()
         {
             return "waffle";

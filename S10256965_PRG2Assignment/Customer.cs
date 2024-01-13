@@ -27,8 +27,16 @@ namespace S10256965_PRG2Assignment
             MemberId = memberId;
             Dob = dob;
         }
-        public Order MakeOrder() { }
-        public bool IsBirthday() { }
+        public Order MakeOrder() 
+        {
+            // TODO
+            return new Order();
+        }
+        public bool IsBirthday() 
+        {
+            // TODO
+            return false;
+        }
         public override string ToString()
         {
             return String.Format("Name: {0}, Member Id: {1}, Date of birth: {2}", 

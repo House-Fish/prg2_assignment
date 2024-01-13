@@ -28,7 +28,11 @@ namespace S10256965_PRG2Assignment
         public void ModifyIceCream(int id) { }
         public void AddIceCream(IceCream iceCream) { }
         public void DeleteIceCream(int id) { }
-        public double CalculateTotal() { }
+        public double CalculateTotal() 
+        {
+            // TODO
+            return 0;
+        }
         public override string ToString()
         {
             string icecreams = "";

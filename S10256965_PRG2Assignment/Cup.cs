@@ -16,7 +16,11 @@ namespace S10256965_PRG2Assignment
     {
         public Cup() { }
         public Cup(string option, int scoop, List<Flavour> flavours, List<Topping> toppings) : base(option, scoop, flavours, toppings) { }
-        public override double CalculatePrice() { }
+        public override double CalculatePrice() 
+        {
+            // TODO
+            return 0;
+        }
         public override string ToString()
         {
             return "cup";
