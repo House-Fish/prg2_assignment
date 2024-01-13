@@ -40,7 +40,7 @@ namespace S10256965_PRG2Assignment
         public override string ToString()
         {
             return String.Format("Name: {0}, Member Id: {1}, Date of birth: {2}", 
-                                 Name, MemberId, Dob); 
+                                 Name, MemberId, Dob.ToString("dd/mm/yyyy")); 
         }
     }
 }
