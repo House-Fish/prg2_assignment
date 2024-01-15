@@ -1,0 +1,8 @@
+# exclude everything except the .cs files within S10256965_PRG2Assignment
+/*
+
+!/.gitignore
+!/S10256965_PRG2Assignment/*
+
+/S10256965_PRG2Assignment/bin/
+/S10256965_PRG2Assignment/obj/
