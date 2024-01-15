@@ -2,7 +2,7 @@
 /*
 
 !/.gitignore
-!/S10256965_PRG2Assignment/*
+!/S10256965_PRG2Assignment/
 
-/S10256965_PRG2Assignment/bin/
-/S10256965_PRG2Assignment/obj/
+/S10256965_PRG2Assignment/bin/*
+/S10256965_PRG2Assignment/obj/*
