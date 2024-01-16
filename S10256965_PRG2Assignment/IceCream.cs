@@ -14,10 +14,10 @@ namespace S10256965_PRG2Assignment
 {
     internal abstract class IceCream
     {
-        public string Option { get; set; }
-        public int Scoop { get; set; }
-        public List<Flavour> Flavours { get; set; }
-        public List<Topping> Toppings { get; set; }
+        public string Option { get; set; } // Cup, Cone or Waffle
+        public int Scoop { get; set; } // Single, Double or Triple
+        public List<Flavour> Flavours { get; set; } // 3 from Regular or Premium Flavour
+        public List<Topping> Toppings { get; set; } // 4 from Toppings
         public IceCream() { }
         public IceCream(string option, int scoop, List<Flavour> flavours, List<Topping> toppings) 
         { 
@@ -29,7 +29,17 @@ namespace S10256965_PRG2Assignment
         public abstract double CalculatePrice();
         public override string ToString()
         {
-            return "Ice Cream";
+            string message = "Flavours: ";
+            foreach(Flavour flavour in Flavours)
+            {
+                message += flavour.ToString() + " ";
+            }
+            message += "Toppings: ";
+            foreach(Topping topping in Toppings)
+            {
+                message += topping.ToString() + " ";
+            }
+            return Option + ": " + message;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace S10256965_PRG2Assignment
         }
         public override string ToString()
         {
-            return "type";
+            return Type;
         }
 
     }

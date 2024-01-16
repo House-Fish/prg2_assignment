@@ -16,7 +16,8 @@ namespace S10256965_PRG2Assignment
     {
         public string WaffleFlavour { get; set; }
         public Waffle() { }
-        public Waffle(string option, int scoop, List<Flavour> flavours, List<Topping> toppings, string waffleFlavour) : base(option, scoop, flavours, toppings)
+        public Waffle(string option, int scoop, List<Flavour> flavours, List<Topping> toppings, string waffleFlavour) 
+                      : base(option, scoop, flavours, toppings)
         {
             WaffleFlavour = waffleFlavour;
         }
@@ -27,7 +28,7 @@ namespace S10256965_PRG2Assignment
         }
         public override string ToString()
         {
-            return "waffle";
+            return base.ToString() + "Add-on: " + WaffleFlavour;
         }
 
     }

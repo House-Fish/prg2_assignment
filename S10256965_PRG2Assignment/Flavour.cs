@@ -14,8 +14,8 @@ namespace S10256965_PRG2Assignment
 {
     internal class Flavour
     {
-        public string Type { get; set; }
-        public bool Premium { get; set; }
+        public string Type { get; set; } // Vanila, Chocolate, Strawberry, (if premium Durian, Ube, Sea salt)
+        public bool Premium { get; set; } // true/false
         public int Quantity { get; set; }
         public Flavour() { } 
         public Flavour(string type, bool premium, int quantity) 
@@ -26,7 +26,7 @@ namespace S10256965_PRG2Assignment
         }
         public override string ToString()
         {
-            return "flavour"; 
+            return String.Format("{0}({1})", Type, Quantity); 
         }
     }
 }
