@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class Cone : IceCream
+    public class Cone : IceCream
     {
         public bool Dipped { get; set; }
         public Cone() { }
@@ -31,7 +31,7 @@ namespace S10256965_PRG2Assignment
             string message = "Add-on: ";
             if (Dipped)
             {
-                message = "Chocolate Dipped";
+                message += "Chocolate Dipped";
             }
             return base.ToString() + message;
         }

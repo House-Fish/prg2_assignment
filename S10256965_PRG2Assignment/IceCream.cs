@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal abstract class IceCream
+    public abstract class IceCream
     {
         public string Option { get; set; } // Cup, Cone or Waffle
         public int Scoop { get; set; } // Single, Double or Triple

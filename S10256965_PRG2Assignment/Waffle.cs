@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class Waffle : IceCream
+    public class Waffle : IceCream
     {
         public string WaffleFlavour { get; set; }
         public Waffle() { }

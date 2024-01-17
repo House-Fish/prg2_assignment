@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class Topping
+    public class Topping
     {
         public string Type { get; set; }
         public Topping() { }

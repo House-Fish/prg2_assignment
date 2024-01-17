@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class Customer
+    public class Customer
     {
         public string Name { get; set; }
         public int MemberId { get; set; }
@@ -26,6 +26,10 @@ namespace S10256965_PRG2Assignment
             Name = name;
             MemberId = memberId;
             Dob = dob;
+
+            // Instantiating variables
+            CurrentOrder = null;
+            OrderHistory = new List<Order>();
         }
         public Order MakeOrder() 
         {

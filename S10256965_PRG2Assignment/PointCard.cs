@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class PointCard
+    public class PointCard
     {
         public int Points { get; set; }
         public int PunchCard { get; set; }

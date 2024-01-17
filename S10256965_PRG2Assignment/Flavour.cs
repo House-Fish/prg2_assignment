@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class Flavour
+    public class Flavour
     {
         public string Type { get; set; } // Vanila, Chocolate, Strawberry, (if premium Durian, Ube, Sea salt)
         public bool Premium { get; set; } // true/false

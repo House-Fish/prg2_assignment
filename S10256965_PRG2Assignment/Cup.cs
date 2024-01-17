@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    internal class Cup : IceCream
+    public class Cup : IceCream
     {
         public Cup() { }
         public Cup(string option, int scoop, List<Flavour> flavours, List<Topping> toppings) 
