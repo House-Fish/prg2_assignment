@@ -18,7 +18,7 @@ namespace S10256965_PRG2Assignment
         public int MemberId { get; set; }
         public DateTime Dob { get; set; }
         public Order CurrentOrder { get; set; }
-        public List<Order> OrderHistory { get; set; }
+        public List<Order> OrderHistory = new List<Order>();
         public PointCard Rewards { get; set; }
         public Customer() { }
         public Customer(string name, int memberId, DateTime dob)
@@ -26,10 +26,6 @@ namespace S10256965_PRG2Assignment
             Name = name;
             MemberId = memberId;
             Dob = dob;
-
-            // Instantiating variables
-            CurrentOrder = null;
-            OrderHistory = new List<Order>();
         }
         public Order MakeOrder() 
         {
@@ -38,8 +34,7 @@ namespace S10256965_PRG2Assignment
         }
         public bool IsBirthday() 
         {
-            // TODO
-            return false;
+            return DateTime.Today.Month == Dob.Month && DateTime.Today.Day == Dob.Day;
         }
         public override string ToString()
         {

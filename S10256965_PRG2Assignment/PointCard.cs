@@ -25,15 +25,15 @@ namespace S10256965_PRG2Assignment
         }
         public void AddPoints(int points) 
         { 
-            // TODO
+            Points += points;
         }
         public void RedeemPoints(int points) 
         { 
-            // TODO
+            Points -= points;
         }
         public void Punch() 
         { 
-            // TODO
+            PunchCard++;
         }
         public override string ToString()
         {

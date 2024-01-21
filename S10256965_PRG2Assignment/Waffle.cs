@@ -23,8 +23,20 @@ namespace S10256965_PRG2Assignment
         }
         public override double CalculatePrice() 
         {
-            // TODO
-            return 0;
+            // Calculate the base price based on the number of scoops
+            double price = Scoop == 1 ? 4.00 : 3.50 + Scoop;
+
+            // Add on the premium flavours cost
+            foreach (Flavour f in Flavours)
+            {
+                if (f.Premium) { price += 2; }
+            }
+
+            // Add on the price of the flavoured waffle
+            price = WaffleFlavour != null ? price += 3 : price;
+
+            // Add the cost of the toppings
+            return price + Toppings.Count;        
         }
         public override string ToString()
         {

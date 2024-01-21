@@ -108,8 +108,12 @@ namespace S10256965_PRG2Assignment
         }
         public double CalculateTotal() 
         {
-            // TODO
-            return 0;
+            double total = 0;
+            foreach (IceCream ic in IceCreamList)
+            {
+                total += ic.CalculatePrice();
+            }
+            return total;
         }
         public override string ToString()
         {

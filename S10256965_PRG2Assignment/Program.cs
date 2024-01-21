@@ -61,7 +61,7 @@ namespace S10256965_PRG2Assignment
 
             // 6) Modify order details
             // Test Case 
-            /*           
+            /*          
             Customer customer = customerDic.ElementAt(0).Value;
             customer.CurrentOrder = Helper.CreateRandomOrder();
             */
@@ -70,17 +70,39 @@ namespace S10256965_PRG2Assignment
         }
         static void Init(Dictionary <string, Customer > customerDic)
         {
-            using (StreamReader sr = new StreamReader("customers.csv"))
-            {
-                string line = sr.ReadLine();
+            string filePath = "customers.csv";
 
-                while ((line = sr.ReadLine()) != null)
+            try
+            {
+                using (StreamReader sr = new StreamReader(filePath))
                 {
-                    string[] data = line.Split(',');
-                    //Amy,685582,12/03/2000
-                    Customer obj = new Customer(data[0], Convert.ToInt32(data[1]), DateTime.Parse(data[2]));
-                    customerDic.Add(data[1], obj);
+                    // Read and ignore the header line
+                    sr.ReadLine();
+
+                    string? line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] data = line.Split(',');
+
+                        if (data.Length != 6)
+                        {
+                            Console.WriteLine($"Invalid, {data.Length} values passed.");
+                            continue;
+                        }
+
+                        if (!Helper.TryParseCustomer(data, out Customer customer))
+                        {
+                            Console.WriteLine($"Failed to parse customer data: {line}");
+                            continue;
+                        }
+
+                        customerDic.Add(customer.MemberId.ToString(), customer);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading file: {ex.Message}");
             }
         }
         // 1) List all customers

@@ -65,6 +65,42 @@ namespace S10256965_PRG2Assignment
                 }
             }
         }
+        public static bool TryParseCustomer(string[] data, out Customer customer)
+        {
+            customer = null;
+
+            if (!int.TryParse(data[1], out int memberId))
+            {
+                Console.WriteLine($"Invalid, unable to parse member id of {data[0]}");
+                return false;
+            }
+
+            if (!DateTime.TryParse(data[2], out DateTime dob))
+            {
+                Console.WriteLine($"Invalid, unable to parse date of birth of {data[0]}");
+                return false;
+            }
+
+            if (!int.TryParse(data[4], out int points))
+            {
+                Console.WriteLine($"Invalid, unable to parse points of {data[0]}");
+                return false;
+            }
+
+            if (!int.TryParse(data[5], out int punchCard))
+            {
+                Console.WriteLine($"Invalid, unable to parse punch card of {data[0]}");
+                return false;
+            }
+
+            PointCard pointCard = new PointCard(points, punchCard);
+            pointCard.Tier = data[3];
+
+            customer = new Customer(data[0], memberId, dob);
+            customer.Rewards = pointCard;
+
+            return true;
+        }
         public static string CreateOption()
         {
             int holdOption = GetOption("Enter how you would like your ice cream to be served",
