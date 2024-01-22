@@ -28,75 +28,7 @@ namespace S10256965_PRG2Assignment
         }
         public void ModifyIceCream(int id) 
         {
-            IceCream iceCream = IceCreamList[id];
-
-            while (true)
-            {
-                Console.WriteLine("Current ice cream:\n" + iceCream.ToString());
-
-                Helper.DisplayMenu(Helper.ModifyIceCream, "Modify ice cream");
-
-                Console.WriteLine("Enter 'q' when you are done modifying the ice cream.");
-
-                Console.Write("Enter the modification option: ");
-                string holdModifyOption = Console.ReadLine();
-
-                if (holdModifyOption == "q")
-                {
-                    break;
-                }
-                if (holdModifyOption == null || !Helper.IsValidOption(holdModifyOption, Helper.ModifyIceCream))
-                {
-                    continue;
-                }
-
-                int modifyOption = Convert.ToInt32(holdModifyOption);
-
-                // Change option & select add-on
-                if (modifyOption == 1)
-                {
-                    string changeOption = Helper.CreateOption();
-                    if (changeOption == iceCream.Option)
-                    {
-                        Console.WriteLine("No change made.");
-                        continue;
-                    }
-                    else if (changeOption == "Cup")
-                    {
-                        iceCream = Helper.CreateIceCreamCup(iceCream.Flavours, iceCream.Toppings);
-                    }
-                    else if (changeOption == "Cone")
-                    {
-                        iceCream = Helper.CreateIceCreamCone(iceCream.Flavours, iceCream.Toppings);
-                    }
-                    else 
-                    {
-                        iceCream = Helper.CreateIceCreamWaffle(iceCream.Flavours, iceCream.Toppings);
-                    }
-                }
-                // Change flavours
-                else if (modifyOption == 2)
-                {
-                    iceCream.Flavours = new List<Flavour>();
-                    Helper.CreateFlavours(iceCream.Flavours);
-                }
-                // Change toppings
-                else if (modifyOption == 3)
-                {
-                    iceCream.Toppings = new List<Topping>();
-                    Helper.CreateToppings(iceCream.Toppings);
-                }
-                // Change add-on for Cone
-                else if (iceCream is Cone)
-                {
-                    iceCream = Helper.CreateIceCreamCone(iceCream.Flavours, iceCream.Toppings);
-                }
-                // Change add-on for Waffle
-                else
-                {
-                    iceCream = Helper.CreateIceCreamWaffle(iceCream.Flavours, iceCream.Toppings);
-                }
-            }
+            IceCreamList[id] = Helper.ModifyIceCream(IceCreamList[id]);
         }
         public void AddIceCream(IceCream iceCream) 
         { 

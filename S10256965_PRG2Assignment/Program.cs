@@ -61,11 +61,11 @@ namespace S10256965_PRG2Assignment
 
             // 6) Modify order details
             // Test Case 
-            /*          
+            /**/          
             Customer customer = customerDic.ElementAt(0).Value;
             customer.CurrentOrder = Helper.CreateRandomOrder();
-            */
-            // ModifyOrder(customerDic);
+            /**/
+            ModifyOrder(customerDic);
 
         }
         static void Init(Dictionary <string, Customer > customerDic)
@@ -250,7 +250,10 @@ namespace S10256965_PRG2Assignment
             // Add new ice cream
             else if (option == 2)
             {
-                customerOrder.AddIceCream(Helper.BuildIceCream());
+                IceCreamDirector director = new IceCreamDirector();
+                director.Build();
+
+                customerOrder.AddIceCream(director.GetIceCream());
             }
             // Delete ice cream
             else

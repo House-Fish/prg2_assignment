@@ -16,8 +16,8 @@ namespace S10256965_PRG2Assignment
     {
         public string Option { get; set; } // Cup, Cone or Waffle
         public int Scoop { get; set; } // Single, Double or Triple
-        public List<Flavour> Flavours { get; set; } // 3 from Regular or Premium Flavour
-        public List<Topping> Toppings { get; set; } // 4 from Toppings
+        public List<Flavour> Flavours = new List<Flavour>(); // 3 from Regular or Premium Flavour
+        public List<Topping> Toppings = new List<Topping>();// 4 from Toppings
         public IceCream() { }
         public IceCream(string option, int scoop, List<Flavour> flavours, List<Topping> toppings) 
         { 
