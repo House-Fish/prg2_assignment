@@ -59,7 +59,7 @@ namespace S10256965_PRG2Assignment
                 }
             }
         }
-        public static bool TryParseCustomer(string[] data, out Customer customer)
+        public static bool TryParseCustomer(string[] data, out Customer? customer)
         {
             customer = null;
 
@@ -87,11 +87,15 @@ namespace S10256965_PRG2Assignment
                 return false;
             }
 
-            PointCard pointCard = new PointCard(points, punchCard);
-            pointCard.Tier = data[3];
+            PointCard pointCard = new PointCard(points, punchCard)
+            {
+                Tier = data[3]
+            };
 
-            customer = new Customer(data[0], memberId, dob);
-            customer.Rewards = pointCard;
+            customer = new Customer(data[0], memberId, dob)
+            {
+                Rewards = pointCard
+            };
 
             return true;
         }
@@ -188,7 +192,7 @@ namespace S10256965_PRG2Assignment
                 }
                 if (!flavourExits)
                 {
-                    bool premium = premiumFlavours.Contains(flavour) ? true : false;
+                    bool premium = premiumFlavours.Contains(flavour);
                     flavoursList.Add(new Flavour(flavour, premium, 1));
                 }
             }

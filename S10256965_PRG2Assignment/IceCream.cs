@@ -14,10 +14,10 @@ namespace S10256965_PRG2Assignment
 {
     public abstract class IceCream
     {
-        public string Option { get; set; } // Cup, Cone or Waffle
-        public int Scoop { get; set; } // Single, Double or Triple
-        public List<Flavour> Flavours = new List<Flavour>(); // 3 from Regular or Premium Flavour
-        public List<Topping> Toppings = new List<Topping>();// 4 from Toppings
+        public string Option = "Cup"; 
+        public int Scoop { get; set; } 
+        public List<Flavour> Flavours = new List<Flavour>(); 
+        public List<Topping> Toppings = new List<Topping>();
         public IceCream() { }
         public IceCream(string option, int scoop, List<Flavour> flavours, List<Topping> toppings) 
         { 

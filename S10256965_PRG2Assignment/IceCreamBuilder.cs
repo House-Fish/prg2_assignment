@@ -8,14 +8,14 @@ namespace S10256965_PRG2Assignment
 {
     public class IceCreamBuilder
     {
-        private static string[] OptionNames = ["Cup", "Cone", "Waffle"];
-        private static string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea salt"];
-        private static string[] PremiumFlavourNames = ["Durian", "Ube", "Sea salt"];
-        private static string[] ToppingNames = ["Sprinkles", "Mochi", "Sago", "Oreos"];
-        private static string[] WaffleFlavourNames = ["Red velvet", "Charcoal", "Pandan Waffle"];
+        private static readonly string[] OptionNames = ["Cup", "Cone", "Waffle"];
+        private static readonly string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea salt"];
+        private static readonly string[] PremiumFlavourNames = ["Durian", "Ube", "Sea salt"];
+        private static readonly string[] ToppingNames = ["Sprinkles", "Mochi", "Sago", "Oreos"];
+        private static readonly string[] WaffleFlavourNames = ["Red velvet", "Charcoal", "Pandan Waffle"];
 
-        private static int maxNoFlavours = 3;
-        private static int maxNoToppings = 4;
+        private static readonly int maxNoFlavours = 3;
+        private static readonly int maxNoToppings = 4;
 
         public static IceCream UpdateOption(IceCream iceCream)
         {
@@ -82,7 +82,7 @@ namespace S10256965_PRG2Assignment
                     }
                     if (!flavourExits)
                     {
-                        bool premium = PremiumFlavourNames.Contains(flavour) ? true : false;
+                        bool premium = PremiumFlavourNames.Contains(flavour);
                         iceCream.Flavours.Add(new Flavour(flavour, premium, 1));
                     }
                 }
@@ -134,7 +134,7 @@ namespace S10256965_PRG2Assignment
 
                 if (input == "Y" || input == "N")
                 {
-                    return input == "Y" ? true : false;
+                    return input == "Y";
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace S10256965_PRG2Assignment
                 }
             }
         }
-        public static string GetWaffleAddOn()
+        public static string? GetWaffleAddOn()
         {
             while (true)
             {

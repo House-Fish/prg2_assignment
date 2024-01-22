@@ -18,13 +18,12 @@ namespace S10256965_PRG2Assignment
         public int Id { get; set; }
         public DateTime TimeReceived { get; set; }
         public DateTime? TimeFulfilled { get; set; }
-        public List<IceCream> IceCreamList { get; set; }
+        public List<IceCream> IceCreamList = new List<IceCream>();
         public Order() { }
         public Order(int id, DateTime timereceived)
         {
             Id = id;
             TimeReceived = timereceived;
-            IceCreamList = new List<IceCream>();
         }
         public void ModifyIceCream(int id) 
         {

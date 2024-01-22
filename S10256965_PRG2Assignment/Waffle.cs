@@ -14,9 +14,9 @@ namespace S10256965_PRG2Assignment
 {
     public class Waffle : IceCream
     {
-        public string WaffleFlavour { get; set; }
+        public string? WaffleFlavour { get; set; }
         public Waffle() { }
-        public Waffle(string option, int scoop, List<Flavour> flavours, List<Topping> toppings, string waffleFlavour) 
+        public Waffle(string option, int scoop, List<Flavour> flavours, List<Topping> toppings, string? waffleFlavour) 
                       : base(option, scoop, flavours, toppings)
         {
             WaffleFlavour = waffleFlavour;

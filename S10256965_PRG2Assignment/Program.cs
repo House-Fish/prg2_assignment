@@ -11,7 +11,7 @@ namespace S10256965_PRG2Assignment
 {
     public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Dictionary<string, Customer> customerDic = new Dictionary<string, Customer>();
             Queue<Order> regularQueue = new Queue<Order>();
@@ -90,7 +90,7 @@ namespace S10256965_PRG2Assignment
                             continue;
                         }
 
-                        if (!Helper.TryParseCustomer(data, out Customer customer))
+                        if (!Helper.TryParseCustomer(data, out var customer) || customer == null)
                         {
                             Console.WriteLine($"Failed to parse customer data: {line}");
                             continue;
@@ -217,43 +217,45 @@ namespace S10256965_PRG2Assignment
         {
             // List & prompt user to select customer
             List<string> customerNames = customerDic.Select(kvp => kvp.Value.Name).ToList();
-            int option = Helper.GetOption("Enter the customer you would like", customerNames.ToArray(),
-                                          "Customer names");
+            int customerIdx = Helper.GetOption("Enter the customer you would like", customerNames.ToArray(), 
+                "Customer names");
 
-            Customer customer = customerDic.ElementAt(option - 1).Value;
+            Customer customer = customerDic.ElementAt(customerIdx - 1).Value;
 
             // Get customers current order
-            Order customerOrder = customer.CurrentOrder;
+            Order currentOrder = customer.CurrentOrder;
 
             // List all the ice creams in the current order
-            if (customerOrder == null)
+            if (currentOrder == null)
             {
                 Console.WriteLine("Invalid option, {0} does not have any current orders.", customer.Name);
                 return;
             }
 
-            Console.WriteLine("Current order:\n" + customerOrder.ToString());
+            Console.WriteLine("Current order:\n" + currentOrder.ToString());
 
-            option = Helper.GetOption("Enter the action you would like to take", Helper.ModifyOptions, "Possible actions");
+            // List & prompt user to select modify option
+            int optionIdx = Helper.GetOption("Enter the action you would like to take", Helper.ModifyOptions, 
+                "Possible actions");
 
-            List<IceCream> iceCreams = customerOrder.IceCreamList;
+            List<IceCream> iceCreams = currentOrder.IceCreamList;
 
             // Modify ice cream
-            if (option == 1)
+            if (optionIdx == 1)
             {
                 List<string> iceCreamDetails = iceCreams.Select(icecream => icecream.ToString()).ToList();
                 int iceCreamIdx = Helper.GetOption("Enter the ice cream you would like to modify", 
                                                     iceCreamDetails.ToArray(), "Ice creams");
 
-                customerOrder.ModifyIceCream(iceCreamIdx - 1);
+                currentOrder.ModifyIceCream(iceCreamIdx - 1);
             }
             // Add new ice cream
-            else if (option == 2)
+            else if (optionIdx == 2)
             {
                 IceCreamDirector director = new IceCreamDirector();
                 director.Build();
 
-                customerOrder.AddIceCream(director.GetIceCream());
+                currentOrder.AddIceCream(director.GetIceCream());
             }
             // Delete ice cream
             else
@@ -268,10 +270,10 @@ namespace S10256965_PRG2Assignment
                 int iceCreamIdx = Helper.GetOption("Enter the ice cream you would like to modify",
                                                     iceCreamDetails.ToArray(), "Ice creams");
 
-                customerOrder.DeleteIceCream(iceCreamIdx - 1);
+                currentOrder.DeleteIceCream(iceCreamIdx - 1);
             }
 
-            Console.WriteLine("Updated order:\n" + customerOrder.ToString());
+            Console.WriteLine("Updated order:\n" + currentOrder.ToString());
         }
     }
 }

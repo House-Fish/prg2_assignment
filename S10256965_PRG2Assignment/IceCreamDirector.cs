@@ -8,52 +8,52 @@ namespace S10256965_PRG2Assignment
 {
     public class IceCreamDirector
     {
-        private IceCream _iceCream { get; set; }
+        private IceCream IceCream { get; set; }
 
         public IceCreamDirector()
         { 
-            _iceCream = new Cup();
+            IceCream = new Cup();
         }
         public IceCreamDirector(IceCream iceCream)
         {
-            _iceCream = iceCream;
+            IceCream = iceCream;
         }
         public void Build()
         {
-            _iceCream = IceCreamBuilder.UpdateOption(_iceCream);
-            _iceCream = IceCreamBuilder.UpdateFlavours(_iceCream);
-            _iceCream = IceCreamBuilder.UpdateToppings(_iceCream);
+            IceCream = IceCreamBuilder.UpdateOption(IceCream);
+            IceCream = IceCreamBuilder.UpdateFlavours(IceCream);
+            IceCream = IceCreamBuilder.UpdateToppings(IceCream);
         }
         public void ModifyOption()
         {
-            _iceCream = IceCreamBuilder.UpdateOption(_iceCream);
+            IceCream = IceCreamBuilder.UpdateOption(IceCream);
         }
         public void ModifyFlavours()
         {
-            _iceCream = IceCreamBuilder.UpdateFlavours(_iceCream);
+            IceCream = IceCreamBuilder.UpdateFlavours(IceCream);
         }
         public void ModifyToppings()
         {
-            _iceCream = IceCreamBuilder.UpdateToppings(_iceCream);
+            IceCream = IceCreamBuilder.UpdateToppings(IceCream);
         }
         public void ModifyAddOn()
         {
-            if (_iceCream is Cone)
+            if (IceCream is Cone)
             {
                 bool isDipped = IceCreamBuilder.GetConeAddOn();
-                _iceCream = new Cone(_iceCream.Option, _iceCream.Scoop, _iceCream.Flavours, _iceCream.Toppings,
+                IceCream = new Cone(IceCream.Option, IceCream.Scoop, IceCream.Flavours, IceCream.Toppings,
                     isDipped);
             }
-            else if ( _iceCream is Waffle) 
+            else if ( IceCream is Waffle) 
             { 
                 string? waffleFlavour = IceCreamBuilder.GetWaffleAddOn();
-                _iceCream = new Waffle(_iceCream.Option, _iceCream.Scoop, _iceCream.Flavours, _iceCream.Toppings,
+                IceCream = new Waffle(IceCream.Option, IceCream.Scoop, IceCream.Flavours, IceCream.Toppings,
                     waffleFlavour);
             }
         }
         public IceCream GetIceCream()
         {
-            return _iceCream;
+            return IceCream;
         }
     }
 }
