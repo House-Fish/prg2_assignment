@@ -8,16 +8,28 @@ namespace S10256965_PRG2Assignment
 {
     public class IceCreamBuilder
     {
-        private static readonly string[] OptionNames = ["Cup", "Cone", "Waffle"];
-        private static readonly string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea salt"];
-        private static readonly string[] PremiumFlavourNames = ["Durian", "Ube", "Sea salt"];
-        private static readonly string[] ToppingNames = ["Sprinkles", "Mochi", "Sago", "Oreos"];
-        private static readonly string[] WaffleFlavourNames = ["Red velvet", "Charcoal", "Pandan Waffle"];
+        private IceCream HoldIceCream { get; set; }
+        private readonly string[] OptionNames = ["Cup", "Cone", "Waffle"];
+        private readonly string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea salt"];
+        private readonly string[] PremiumFlavourNames = ["Durian", "Ube", "Sea salt"];
+        private readonly string[] ToppingNames = ["Sprinkles", "Mochi", "Sago", "Oreos"];
+        private readonly string[] WaffleFlavourNames = ["Red velvet", "Charcoal", "Pandan Waffle"];
 
-        private static readonly int maxNoFlavours = 3;
-        private static readonly int maxNoToppings = 4;
+        private readonly int maxNoFlavours = 3;
+        private readonly int maxNoToppings = 4;
 
-        public static IceCream UpdateOption(IceCream iceCream)
+        public IceCreamBuilder() 
+        {
+            HoldIceCream = new Cup();
+            UpdateOption();
+            UpdateFlavours();
+            UpdateToppings();
+        }
+        public IceCreamBuilder(IceCream iceCream)
+        {
+            HoldIceCream = iceCream;
+        }
+        public void UpdateOption()
         {
             int optionIdx = Helper.GetOption("Enter how you would like your ice cream to be served",
                 OptionNames, "Serving options");
@@ -25,21 +37,20 @@ namespace S10256965_PRG2Assignment
 
             if (optionIdx == 1)
             {
-                iceCream = new Cup(option, iceCream.Scoop, iceCream.Flavours, iceCream.Toppings);
+                 HoldIceCream = new Cup(option, HoldIceCream.Scoop, HoldIceCream.Flavours, HoldIceCream.Toppings);
             }
             else if (optionIdx == 2)
             {
                 bool isDipped = GetConeAddOn();
-                iceCream = new Cone(option, iceCream.Scoop, iceCream.Flavours, iceCream.Toppings, isDipped);
+                HoldIceCream = new Cone(option, HoldIceCream.Scoop, HoldIceCream.Flavours, HoldIceCream.Toppings, isDipped);
             }
             else            
             {
                 string? waffleFlavour = GetWaffleAddOn();
-                iceCream = new Waffle(option, iceCream.Scoop, iceCream.Flavours, iceCream.Toppings, waffleFlavour);
+                HoldIceCream = new Waffle(option, HoldIceCream.Scoop, HoldIceCream.Flavours, HoldIceCream.Toppings, waffleFlavour);
             }
-            return iceCream;
         }
-        public static IceCream UpdateFlavours(IceCream iceCream)
+        public void UpdateFlavours()
         {
             string menuTitle = "Flavour options";
             string prompt = "You can choose a maximum of " + maxNoFlavours + ".\nEnter 's' if you would like to skip.";
@@ -72,7 +83,7 @@ namespace S10256965_PRG2Assignment
 
                     bool flavourExits = false;
 
-                    foreach (Flavour flav in iceCream.Flavours)
+                    foreach (Flavour flav in HoldIceCream.Flavours)
                     {
                         if (flav.Type == flavour)
                         {
@@ -83,13 +94,12 @@ namespace S10256965_PRG2Assignment
                     if (!flavourExits)
                     {
                         bool premium = PremiumFlavourNames.Contains(flavour);
-                        iceCream.Flavours.Add(new Flavour(flavour, premium, 1));
+                        HoldIceCream.Flavours.Add(new Flavour(flavour, premium, 1));
                     }
                 }
             }
-            return iceCream;
         }
-        public static IceCream UpdateToppings(IceCream iceCream)
+        public void UpdateToppings()
         {
             string menuTitle = "Topping options";
             string prompt = "You can choose a maximum of " + maxNoToppings + ".\nEnter 's' if you would like to skip.";
@@ -120,12 +130,26 @@ namespace S10256965_PRG2Assignment
 
                     string topping = ToppingNames[Convert.ToInt32(input) - 1];
 
-                    iceCream.Toppings.Add(new Topping(topping));
+                    HoldIceCream.Toppings.Add(new Topping(topping));
                 }
             }
-            return iceCream;
         }
-        public static bool GetConeAddOn()
+        public void UpdateAddOn()
+        {
+            if (HoldIceCream is Cone)
+            {
+                bool isDipped = GetConeAddOn();
+                HoldIceCream = new Cone(HoldIceCream.Option, HoldIceCream.Scoop, HoldIceCream.Flavours, HoldIceCream.Toppings,
+                    isDipped);
+            }
+            else if (HoldIceCream is Waffle) 
+            { 
+                string? waffleFlavour = GetWaffleAddOn();
+                HoldIceCream = new Waffle(HoldIceCream.Option, HoldIceCream.Scoop, HoldIceCream.Flavours, HoldIceCream.Toppings,
+                    waffleFlavour);
+            }
+        }
+        public bool GetConeAddOn()
         {
             while (true)
             {
@@ -142,7 +166,7 @@ namespace S10256965_PRG2Assignment
                 }
             }
         }
-        public static string? GetWaffleAddOn()
+        public string? GetWaffleAddOn()
         {
             while (true)
             {
@@ -166,6 +190,9 @@ namespace S10256965_PRG2Assignment
                 }
             }
         }
-
+        public IceCream GetIceCream()
+        {
+            return HoldIceCream;
+        }
     }
 }

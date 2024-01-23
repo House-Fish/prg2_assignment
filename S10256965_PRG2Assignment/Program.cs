@@ -252,10 +252,9 @@ namespace S10256965_PRG2Assignment
             // Add new ice cream
             else if (optionIdx == 2)
             {
-                IceCreamDirector director = new IceCreamDirector();
-                director.Build();
+                IceCreamBuilder builder = new IceCreamBuilder();
 
-                currentOrder.AddIceCream(director.GetIceCream());
+                currentOrder.AddIceCream(builder.GetIceCream());
             }
             // Delete ice cream
             else

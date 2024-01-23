@@ -101,7 +101,7 @@ namespace S10256965_PRG2Assignment
         }
         public static IceCream ModifyIceCream(IceCream iceCream)
         {
-            IceCreamDirector director = new IceCreamDirector(iceCream);
+            IceCreamBuilder builder = new IceCreamBuilder(iceCream);
 
             while (true)
             {
@@ -122,29 +122,30 @@ namespace S10256965_PRG2Assignment
                 // Change option & select add-on
                 if (optionIdx == 1)
                 {
-                    director.ModifyOption();
+                    builder.UpdateOption();
                 }
                 // Change flavours
                 else if (optionIdx == 2)
                 {
-                    director.ModifyOption();
+                    builder.UpdateFlavours();
                 }
                 // Change toppings
                 else if (optionIdx == 3)
                 {
-                    director.ModifyFlavours();
+                    builder.UpdateToppings();
                 }
                 // Change add on
                 else if (optionIdx == 4)
                 {
-                    director.ModifyAddOn();
+                    builder.UpdateAddOn();
                 }
                 // Exit
                 else if (optionIdx == 5)
                 {
                     return iceCream;
                 }
-                iceCream = director.GetIceCream();
+
+                iceCream = builder.GetIceCream();
             }
         }
         public static Order CreateRandomOrder()
