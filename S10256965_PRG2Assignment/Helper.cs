@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,43 +62,248 @@ namespace S10256965_PRG2Assignment
                 }
             }
         }
-        public static bool TryParseCustomer(string[] data, out Customer? customer)
+        public static bool TryInitializeCustomers(Dictionary<int, Customer> customerDic, string filePath)
         {
-            customer = null;
-
-            if (!int.TryParse(data[1], out int memberId))
+            try
             {
-                Console.WriteLine($"Invalid, unable to parse member id of {data[0]}");
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    // Read and ignore the header line
+                    sr.ReadLine();
+
+                    string? line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] data = line.Split(',');
+
+                        if (data.Length != 6)
+                        {
+                            Console.WriteLine($"Invalid, {data.Length} values passed.");
+                            continue;
+                        }
+
+                        Customer? customer = TryParseCustomer(data);
+
+                        if (customer == null)
+                        {
+                            throw new Exception("Failed to parse customer, skipping customer.");
+                        }
+
+                        customerDic.Add(customer.MemberId, customer);
+                    }
+                }
+                return true;
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"Error reading file: {ex.Message}");
                 return false;
             }
-
-            if (!DateTime.TryParse(data[2], out DateTime dob))
+            catch (Exception ex)
             {
-                Console.WriteLine($"Invalid, unable to parse date of birth of {data[0]}");
+                Console.WriteLine($"Error reading file: {ex.Message}");
                 return false;
             }
+        }
+        public static Customer? TryParseCustomer(string[] data)
+        {
+            /* Format
+            Name,MemberId,DOB,MembershipStatus,MembershipPoints,PunchCard
+            Amelia,685582,12/03/2000,Gold,150,8
+             */
 
-            if (!int.TryParse(data[4], out int points))
+            string name, membershipStatus;
+            int memberId, points, punchCard;
+            DateTime dob;
+
+            // Try to convert to respective types 
+            try
             {
-                Console.WriteLine($"Invalid, unable to parse points of {data[0]}");
-                return false;
+                name = data[0];
+                memberId = Convert.ToInt32(data[1]);
+                dob = Convert.ToDateTime(data[2]);
+                membershipStatus = data[3];
+                points = Convert.ToInt32(data[4]);
+                punchCard = Convert.ToInt32(data[5]);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                return null;
             }
 
-            if (!int.TryParse(data[5], out int punchCard))
-            {
-                Console.WriteLine($"Invalid, unable to parse punch card of {data[0]}");
-                return false;
-            }
-
+            // Create PointCard and Customer from values found
             PointCard pointCard = new PointCard(points, punchCard)
             {
                 Tier = data[3]
             };
 
-            customer = new Customer(data[0], memberId, dob)
+            Customer customer = new Customer(data[0], memberId, dob)
             {
                 Rewards = pointCard
             };
+
+            return customer;
+        }
+        public static bool TryInitalizeOrders(Dictionary<int, Customer> customerDic, string filePath)
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    // Read and ignore the header line
+                    sr.ReadLine();
+
+                    string? line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] data = line.Split(',');
+
+                        if (data.Length != 15)
+                        {
+                            Console.WriteLine($"Invalid, {data.Length} values passed.");
+                            return false;
+                        }
+
+                        if (!TryParseOrder(data, customerDic))
+                        {
+                            throw new Exception("Failed to parse order, skipping order.");
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"Error reading file: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading file: {ex.Message}");
+                return false;
+            }
+
+        }
+        public static bool TryParseOrder(string[] data, Dictionary<int, Customer> customerDic)
+        {
+            /* Format 
+            Id,MemberId,TimeReceived,TimeFulfilled,Option,Scoops,Dipped,WaffleFlavour,Flavour1,Flavour2,Flavour3,Topping1,Topping2,Topping3,Topping4
+            1,685582,27/10/2023 13:28,27/10/2023 13:51,Waffle,1,,Red Velvet,Ube,,,Mochi,,,
+            */
+
+            int id, memberId, scoops;
+            string option, waffleFlavour;
+            bool isDipped;
+            DateTime timeReceived, timeFulfilled;
+
+            List<Flavour> flavours = new List<Flavour>();
+            List<Topping> toppings = new List<Topping>();
+
+            try
+            {
+                id = Convert.ToInt32(data[0]);
+                memberId = Convert.ToInt32(data[1]);
+                timeReceived = Convert.ToDateTime(data[2]);
+                timeFulfilled = Convert.ToDateTime(data[3]);
+                option = data[4];
+                scoops = Convert.ToInt32(data[5]);
+
+                // Optional fields
+                if (data[6] == "") 
+                {
+                    isDipped = false;
+                }
+                else if (!bool.TryParse(data[6], out isDipped))
+                {
+                    throw new Exception("Dipped value is invalid");
+                }
+
+                if (data[7] == "" || data[7] == "Original") 
+                {
+                    waffleFlavour = "";
+                }
+                else if (IceCreamBuilder.WaffleFlavourNames.Contains(data[7]))
+                {
+                    waffleFlavour = data[7];
+                }
+                else
+                {
+                    throw new Exception("Waffle Flavour value is invalid");
+                }
+
+                foreach (string flavour in data[8..11])
+                {
+                    if (flavour == "") 
+                    {
+                        break;
+                    }
+                    else if (flavours.Any(obj => obj.Type == flavour))
+                    {
+                        flavours.First(obj => obj.Type == flavour).Quantity++;
+                    }
+                    else
+                    {
+                        bool premium = IceCreamBuilder.PremiumFlavourNames.Contains(flavour);
+                        flavours.Add(new Flavour(flavour, premium, 1));
+                    }
+                }
+
+                foreach (string topping in data[11..data.Length])
+                {
+                    if (topping == "") 
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        toppings.Add(new Topping(topping));
+                    }
+                }
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+
+            Customer customer = customerDic[memberId];
+
+            IceCream iceCream = new Cup(option, scoops, flavours, toppings);
+
+            if (option == "Cone")
+            {
+                iceCream = new Cone(option, scoops, flavours, toppings, isDipped);
+            }
+            else if (option == "Waffle")
+            {
+                iceCream = new Waffle(option, scoops, flavours, toppings, waffleFlavour);
+            }
+
+            // Create a new order if it does not exist
+            if (!customer.OrderHistory.Any(obj => obj.Id == id))
+            {
+                Order order = new Order(id, timeReceived) 
+                { 
+                    TimeFulfilled = timeFulfilled 
+                };
+                customer.OrderHistory.Add(order);
+            }
+
+            // Add the ice cream to the order
+            customer.OrderHistory.First(obj => obj.Id == id).AddIceCream(iceCream);
 
             return true;
         }

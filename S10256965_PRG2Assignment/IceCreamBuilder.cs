@@ -9,14 +9,14 @@ namespace S10256965_PRG2Assignment
     public class IceCreamBuilder
     {
         private IceCream HoldIceCream { get; set; }
-        private readonly string[] OptionNames = ["Cup", "Cone", "Waffle"];
-        private readonly string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea salt"];
-        private readonly string[] PremiumFlavourNames = ["Durian", "Ube", "Sea salt"];
-        private readonly string[] ToppingNames = ["Sprinkles", "Mochi", "Sago", "Oreos"];
-        private readonly string[] WaffleFlavourNames = ["Red velvet", "Charcoal", "Pandan Waffle"];
+        public static readonly string[] OptionNames = ["Cup", "Cone", "Waffle"];
+        public static readonly string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea Salt"];
+        public static readonly string[] PremiumFlavourNames = ["Durian", "Ube", "Sea Salt"];
+        public static readonly string[] ToppingNames = ["Sprinkles", "Mochi", "Sago", "Oreos"];
+        public static readonly string[] WaffleFlavourNames = ["Red Velvet", "Charcoal", "Pandan Waffle"];
 
-        private readonly int maxNoFlavours = 3;
-        private readonly int maxNoToppings = 4;
+        public static readonly int maxNoFlavours = 3;
+        public static readonly int maxNoToppings = 4;
 
         public IceCreamBuilder() 
         {

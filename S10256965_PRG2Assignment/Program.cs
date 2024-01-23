@@ -4,8 +4,10 @@
 // Partner Name : Yu Yi Lucas
 //==========================================================
 using System.ComponentModel.Design;
+using System.Dynamic;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace S10256965_PRG2Assignment
 {
@@ -13,7 +15,7 @@ namespace S10256965_PRG2Assignment
     {
         static void Main()
         {
-            Dictionary<string, Customer> customerDic = new Dictionary<string, Customer>();
+            Dictionary<int, Customer> customerDic = new Dictionary<int, Customer>();
             Queue<Order> regularQueue = new Queue<Order>();
             Queue<Order> goldQueue = new Queue<Order>();
 
@@ -45,70 +47,29 @@ namespace S10256965_PRG2Assignment
             // AddNewCustomer(customerDic);
 
             // 5) Display order details of a customer
-            // Test Case
-            /* 
-            Customer customer = customerDic.ElementAt(0).Value;
-            customer.CurrentOrder = Helper.CreateRandomOrder();
-
-            int noRandom = random.Next(10);
-
-            for (int i = 0; i < noRandom; i++)
-            {
-                customer.OrderHistory.Add(Helper.CreateRandomOrder());
-            }
-            */
-            // DisplayCustomersOrders(customerDic);
+            DisplayCustomersOrders(customerDic);
 
             // 6) Modify order details
             // Test Case 
-            /**/          
+            /*          
             Customer customer = customerDic.ElementAt(0).Value;
             customer.CurrentOrder = Helper.CreateRandomOrder();
-            /**/
-            ModifyOrder(customerDic);
+            */
+            // ModifyOrder(customerDic);
 
         }
-        static void Init(Dictionary <string, Customer > customerDic)
+        static void Init(Dictionary <int, Customer > customerDic)
         {
-            string filePath = "customers.csv";
+            string customerFilePath = "customers.csv";
+            string orderFilePath = "orders.csv";
 
-            try
-            {
-                using (StreamReader sr = new StreamReader(filePath))
-                {
-                    // Read and ignore the header line
-                    sr.ReadLine();
-
-                    string? line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        string[] data = line.Split(',');
-
-                        if (data.Length != 6)
-                        {
-                            Console.WriteLine($"Invalid, {data.Length} values passed.");
-                            continue;
-                        }
-
-                        if (!Helper.TryParseCustomer(data, out var customer) || customer == null)
-                        {
-                            Console.WriteLine($"Failed to parse customer data: {line}");
-                            continue;
-                        }
-
-                        customerDic.Add(customer.MemberId.ToString(), customer);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error reading file: {ex.Message}");
-            }
+            Helper.TryInitializeCustomers(customerDic, customerFilePath);
+            Helper.TryInitalizeOrders(customerDic, orderFilePath);
         }
         // 1) List all customers
-        static void DisplayAllCustomerDetails(Dictionary<string, Customer> customerDic)
+        static void DisplayAllCustomerDetails(Dictionary<int, Customer> customerDic)
         {
-            foreach (KeyValuePair<string, Customer> kvp in customerDic)
+            foreach (KeyValuePair<int, Customer> kvp in customerDic)
             {
                 Console.WriteLine(kvp.Value.ToString());
             }
@@ -149,7 +110,7 @@ namespace S10256965_PRG2Assignment
             }
         }
         // 3) Register a new customer
-        static void AddNewCustomer(Dictionary<string, Customer> customerDic)
+        static void AddNewCustomer(Dictionary<int, Customer> customerDic)
         {
             Console.Write("Enter the name of the new customer: ");
             string name = Console.ReadLine();
@@ -166,14 +127,15 @@ namespace S10256965_PRG2Assignment
 
             customer.Rewards = pointCard;
 
-            customerDic.Add(id, customer);
+            Int32.TryParse(id, out int memberId);
+            customerDic.Add(memberId, customer);
 
             File.AppendAllText("customers.csv", Environment.NewLine + name + "," + id + "," + dob.ToString("dd/mm/yyyy"));
 
             Console.WriteLine("New customer added successfully.");
         }
         // 5) Display order details of a customer 
-        static void DisplayCustomersOrders(Dictionary<string, Customer> customerDic)
+        static void DisplayCustomersOrders(Dictionary<int, Customer> customerDic)
         {
             List<string> customerNames = customerDic.Select(kvp => kvp.Value.Name).ToList();
             int option = Helper.GetOption("Enter the customer you would like", customerNames.ToArray(),
@@ -213,7 +175,7 @@ namespace S10256965_PRG2Assignment
             }
         }
         // 6) Modify order details 
-        static void ModifyOrder(Dictionary<string, Customer> customerDic)
+        static void ModifyOrder(Dictionary<int, Customer> customerDic)
         {
             // List & prompt user to select customer
             List<string> customerNames = customerDic.Select(kvp => kvp.Value.Name).ToList();
