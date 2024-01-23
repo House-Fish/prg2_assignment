@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
 
 namespace S10256965_PRG2Assignment
 {
@@ -47,7 +48,7 @@ namespace S10256965_PRG2Assignment
             // AddNewCustomer(customerDic);
 
             // 5) Display order details of a customer
-            DisplayCustomersOrders(customerDic);
+            // DisplayCustomersOrders(customerDic);
 
             // 6) Modify order details
             // Test Case 
@@ -57,6 +58,16 @@ namespace S10256965_PRG2Assignment
             */
             // ModifyOrder(customerDic);
 
+            // 7) Process an order and checkout
+            // Test cases
+            /*
+            while (true)
+            {
+                Helper.AddRandomOrder(customerDic, goldQueue, regularQueue);
+                ProcessOrder(customerDic, regularQueue, goldQueue);
+            }
+            */
+            // ProcessOrder(customerDic, regularQueue, goldQueue);
         }
         static void Init(Dictionary <int, Customer > customerDic)
         {
@@ -235,6 +246,107 @@ namespace S10256965_PRG2Assignment
             }
 
             Console.WriteLine("Updated order:\n" + currentOrder.ToString());
+        }
+        // 7) Process an order and checkout
+        static void ProcessOrder(Dictionary<int, Customer> customerDic, Queue<Order> regularQueue, Queue<Order> goldQueue)
+        {
+            double totalAmount;
+
+            // Only go through regular queue if the gold queue is empty
+            Queue<Order> queue = goldQueue.Count == 0 ? regularQueue : goldQueue;
+
+            Order order = queue.Dequeue();
+
+            int idx = 1;
+            Console.WriteLine("Items in the order: ");
+            foreach (IceCream iceCream in order.IceCreamList)
+            {
+                Console.WriteLine("[" + idx + "] " + iceCream.ToString());
+                idx++;
+            }
+
+            totalAmount = order.CalculateTotal();
+            Console.WriteLine("Total bill: " + totalAmount.ToString("0.00"));
+
+            Customer? customer = customerDic.Values
+                .FirstOrDefault(obj => obj?.CurrentOrder?.Id == order.Id);
+
+            if (customer == null)
+            {
+                Console.WriteLine("Order is not linked to a customer.");
+                return;
+            }
+
+            Console.WriteLine("Customer details:");
+            Console.WriteLine("Name: " + customer.Name);
+            Console.WriteLine("Membership status: " + customer.Rewards.Tier);
+            Console.WriteLine("Points: " + customer.Rewards.Points);
+
+            if (customer.IsBirthday())
+            {
+                IceCream expensiveIceCream = order.IceCreamList.Max();
+                totalAmount -= expensiveIceCream.CalculatePrice();
+                Console.WriteLine("Happy Birthday! Discounting the most expensive ice cream.");
+            }
+
+            if (customer.Rewards.PunchCard == 10)
+            {
+                IceCream firstIceCream = order.IceCreamList[0];
+                totalAmount -= firstIceCream.CalculatePrice();
+                customer.Rewards.PunchCard = 0;
+                Console.WriteLine("You have filled up your punch card! Discounting your first ice cream.");
+            }
+
+            if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold")
+            {
+                int noPoints;
+                while (true)
+                {
+                    Console.Write("Enter how many points you would like to use: ");
+                    if (!Int32.TryParse(Console.ReadLine(), out noPoints))
+                    {
+                        Console.WriteLine("Invalid, points should be a number");
+                    }
+                    else if (noPoints < 0 || noPoints > customer.Rewards.Points) 
+                    {
+                        Console.WriteLine("Invalid, the value should be between 0 and " +
+                            $"{customer.Rewards.Points} points.");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                double discount = noPoints * 0.02;
+                totalAmount -= discount;
+
+                Console.WriteLine($"Discounted ${discount.ToString("0.00")}.");
+            }
+
+            Console.WriteLine("Final total bill: " + totalAmount.ToString("0.00"));
+
+            Console.Write("Enter any key to make payment: ");
+            Console.ReadLine();
+
+            int punchCard = customer.Rewards.PunchCard;
+            int addition = order.IceCreamList.Count;
+            customer.Rewards.PunchCard = Math.Min(punchCard + addition, 10);
+
+            customer.Rewards.AddPoints((int)Math.Floor(totalAmount * 0.72));
+
+            if (customer.Rewards.Points >= 100)
+            {
+                customer.Rewards.Tier = "Gold";
+            }
+            else if (customer.Rewards.Points >= 50)
+            {
+                customer.Rewards.Tier = "Silver";
+            }
+
+            order.TimeFulfilled = DateTime.Now;
+
+            customer.OrderHistory.Add(order);
         }
     }
 }

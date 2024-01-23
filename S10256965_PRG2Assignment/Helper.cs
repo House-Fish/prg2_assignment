@@ -365,12 +365,38 @@ namespace S10256965_PRG2Assignment
 
             int noIceCreams = rand.Next(5);
 
-            for (int i = 0; i < noIceCreams; i++)
+            for (int i = 1; i < noIceCreams; i++)
             {
                 IceCream iceCream = CreateRandomIceCream(rand);
                 order.AddIceCream(iceCream);
             }
             return order;
+        }
+        public static void AddRandomOrder(Dictionary<int, Customer> customerDic, Queue<Order> gQ, Queue<Order> rQ)
+        {
+            Random rand = new Random();
+
+            Customer customer = customerDic.Values.ElementAt(rand.Next(customerDic.Count));
+
+            Queue<Order> q = rQ;
+            if (customer.Rewards.Tier == "Gold")
+            {
+                q = gQ;
+            }
+
+            Order order = new Order(q.Count + 1, DateTime.Now);
+
+            int noIceCreams = rand.Next(1, 5);
+
+            for (int i = 0; i < noIceCreams; i++)
+            {
+                IceCream iceCream = CreateRandomIceCream(rand);
+                order.AddIceCream(iceCream);
+            }
+            Console.WriteLine(order.ToString());
+
+            customer.CurrentOrder = order;
+            q.Enqueue(order);
         }
         public static IceCream CreateRandomIceCream(Random rand)
         {

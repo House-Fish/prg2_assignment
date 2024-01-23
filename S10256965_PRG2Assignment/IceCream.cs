@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10256965_PRG2Assignment
 {
-    public abstract class IceCream
+    public abstract class IceCream : IComparable<IceCream>
     {
         public string Option = "Cup"; 
         public int Scoop { get; set; } 
@@ -27,6 +27,10 @@ namespace S10256965_PRG2Assignment
             Toppings = toppings;
         }
         public abstract double CalculatePrice();
+        public int CompareTo(IceCream oIceCream)
+        {
+            return CalculatePrice().CompareTo(oIceCream.CalculatePrice());
+        }
         public override string ToString()
         {
             string message = "Flavours: ";
