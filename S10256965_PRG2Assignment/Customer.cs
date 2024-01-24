@@ -29,7 +29,6 @@ namespace S10256965_PRG2Assignment
         }
         public Order MakeOrder() 
         {
-            // TODO
             return new Order();
         }
         public bool IsBirthday() 

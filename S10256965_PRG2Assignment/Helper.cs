@@ -1,4 +1,10 @@
-﻿using System;
+﻿//==========================================================
+// Student Number : S10256965
+// Student Name : Lee Jia Yu
+// Partner Name : Yu Yi Lucas
+//==========================================================
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;

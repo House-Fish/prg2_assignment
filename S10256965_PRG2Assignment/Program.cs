@@ -3,6 +3,7 @@
 // Student Name : Lee Jia Yu
 // Partner Name : Yu Yi Lucas
 //==========================================================
+
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Dynamic;
@@ -416,9 +417,6 @@ namespace S10256965_PRG2Assignment
                     {
                         incomeDic[timeFulfilled.Month] += order.CalculateTotal();
                     }
-
-
-
                 }
             }
 
