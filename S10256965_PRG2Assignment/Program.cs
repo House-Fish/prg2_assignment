@@ -49,8 +49,8 @@ namespace S10256965_PRG2Assignment
             // AddNewCustomer(customerDic);
 
             // 4) Create a customer's order
-            CreateCustomerOrder(customerDic, regularQueue, goldQueue);
-            DisplayCurrentOrders(regularQueue, goldQueue);
+            // CreateCustomerOrder(customerDic, regularQueue, goldQueue);
+
             // 5) Display order details of a customer
             // DisplayCustomersOrders(customerDic);
 
@@ -72,6 +72,7 @@ namespace S10256965_PRG2Assignment
             }
             */
             // ProcessOrder(customerDic, regularQueue, goldQueue);
+            MonthlyBreakdown(customerDic);
         }
         static void Init(Dictionary <int, Customer > customerDic)
         {
@@ -387,5 +388,49 @@ namespace S10256965_PRG2Assignment
 
             customer.OrderHistory.Add(order);
         }
+        // 8) Dsiplay monthly charged amounts and total charged amounts for the year
+        static void MonthlyBreakdown(Dictionary<int, Customer> customerDic)
+        {
+            Console.Write("Enter the year: ");
+            DateTime input = new DateTime(Convert.ToInt32(Console.ReadLine()), 1, 1);
+
+            Dictionary<int, double> incomeDic = new Dictionary<int, double>();
+            for (int i = 1; i < 13; i++)
+            {
+                incomeDic.Add(i, 0);
+            }
+
+            // find the year and month the order was finished \
+            // two loops
+            // first loop goes through all the customers and accesses the OrderHistory from the customerDic 
+            // second loop selects the orders based off of the year the user input
+            // append to incomeDic by month = key, order cost add to value by the key
+            foreach( Customer customer in customerDic.Values ) {
+
+                List<Order> orderList = customer.OrderHistory;
+                foreach ( Order order in orderList )
+                {
+                    DateTime timeFulfilled = (DateTime)(order.TimeFulfilled);
+
+                    if (timeFulfilled.Year == input.Year)
+                    {
+                        incomeDic[timeFulfilled.Month] += order.CalculateTotal();
+                    }
+
+
+
+                }
+            }
+
+            foreach (KeyValuePair<int, double> kvp in incomeDic ) 
+            { 
+                Console.WriteLine(kvp.Key.ToString() + ": " + kvp.Value.ToString());
+            }
+
+        }
     }
+    
+
+
+
 }
