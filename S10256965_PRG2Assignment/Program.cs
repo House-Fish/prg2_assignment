@@ -3,6 +3,7 @@
 // Student Name : Lee Jia Yu
 // Partner Name : Yu Yi Lucas
 //==========================================================
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Dynamic;
 using System.Reflection.Metadata.Ecma335;
@@ -47,6 +48,9 @@ namespace S10256965_PRG2Assignment
             // 3) Register a new customer
             // AddNewCustomer(customerDic);
 
+            // 4) Create a customer's order
+            CreateCustomerOrder(customerDic, regularQueue, goldQueue);
+            DisplayCurrentOrders(regularQueue, goldQueue);
             // 5) Display order details of a customer
             // DisplayCustomersOrders(customerDic);
 
@@ -123,6 +127,7 @@ namespace S10256965_PRG2Assignment
         // 3) Register a new customer
         static void AddNewCustomer(Dictionary<int, Customer> customerDic)
         {
+            // handle customers that already exist
             Console.Write("Enter the name of the new customer: ");
             string name = Console.ReadLine();
 
@@ -141,10 +146,44 @@ namespace S10256965_PRG2Assignment
             Int32.TryParse(id, out int memberId);
             customerDic.Add(memberId, customer);
 
-            File.AppendAllText("customers.csv", Environment.NewLine + name + "," + id + "," + dob.ToString("dd/mm/yyyy"));
+            File.AppendAllText("customers.csv", Environment.NewLine + name + "," + id + "," + dob.ToString("dd/mm/yyyy") + ", Ordinary, 0, 0");
 
             Console.WriteLine("New customer added successfully.");
         }
+        // 4) Create a customer's order
+        static void CreateCustomerOrder(Dictionary<int, Customer> customerDic, Queue<Order> regularQueue, Queue<Order> goldQueue)
+        {
+            // displays the list of customers
+            // finds the cutomer via their id in the list displayed
+            // option is the value corresponding to the index in the customer dic - 1
+            List<string> customerNames = customerDic.Select(kvp => kvp.Value.Name).ToList();
+            int option = Helper.GetOption("Enter the customer you would like", customerNames.ToArray(),
+                                          "Customer names");
+  
+            Queue<Order> orders = regularQueue;
+            Customer customer = customerDic.Values.ElementAt(option - 1);
+            if (customer.Rewards.Tier == "Gold")
+            {
+                orders = goldQueue;
+            }
+            // id in this case is the position in the queue
+
+            Order order = new Order(orders.Count + 1, DateTime.Now);
+            while (true)
+            {
+                IceCreamBuilder builder = new IceCreamBuilder();
+                order.AddIceCream(builder.GetIceCream());
+                Console.WriteLine("Would you like to add another ice cream to your order? [Y/N]");
+                string input = Console.ReadLine();
+                if (input == "N"){
+                    break;
+                }
+            }
+            orders.Enqueue(order);
+            Console.WriteLine("Your order is successfull");
+
+        }
+
         // 5) Display order details of a customer 
         static void DisplayCustomersOrders(Dictionary<int, Customer> customerDic)
         {
