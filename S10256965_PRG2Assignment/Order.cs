@@ -15,7 +15,7 @@ namespace S10256965_PRG2Assignment
 {
     public class Order
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public DateTime TimeReceived { get; set; }
         public DateTime? TimeFulfilled { get; set; }
         public List<IceCream> IceCreamList = new List<IceCream>();

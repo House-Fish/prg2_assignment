@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Dynamic;
+using System.Globalization;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -21,12 +22,60 @@ namespace S10256965_PRG2Assignment
             Dictionary<int, Customer> customerDic = new Dictionary<int, Customer>();
             Queue<Order> regularQueue = new Queue<Order>();
             Queue<Order> goldQueue = new Queue<Order>();
+            string[] options = ["List all customers", 
+                "List all current orders of gold and ordinary members", 
+                "Register a new customer",
+                "Create a customer's order",
+                "Display order details of a customer",
+                "Modify order details",
+                "Process an order and checkout",
+                "Display monthly charged amounts breakdown & total charged amounts for the year",
+                "Exit"
+                ];
 
             Init(customerDic);
 
-            // Init random 
-            Random random = new Random();
+            while (true)
+            {
+                int option = Helper.GetOption("Enter the option", options, "Enter option");
 
+                if (option == 1)
+                {
+                    DisplayAllCustomerDetails(customerDic); 
+                } 
+                else if (option == 2)
+                {
+                    DisplayCurrentOrders(regularQueue, goldQueue); 
+                }
+                else if (option == 3)
+                {
+                    AddNewCustomer(customerDic); 
+                }
+                else if (option == 4)
+                {
+                    CreateCustomerOrder(customerDic, regularQueue, goldQueue); 
+                }
+                else if (option == 5)
+                {
+                    DisplayCustomersOrders(customerDic); 
+                }
+                else if (option == 6)
+                {
+                    ModifyOrder(customerDic); 
+                }
+                else if (option == 7)
+                {
+                    ProcessOrder(customerDic, regularQueue, goldQueue); 
+                }
+                else if (option == 9)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Option 8??");
+                }
+            }
             // 1) List all customers
             // DisplayAllCustomerDetails(customerDic);
 
@@ -73,9 +122,8 @@ namespace S10256965_PRG2Assignment
             }
             */
             // ProcessOrder(customerDic, regularQueue, goldQueue);
-            MonthlyBreakdown(customerDic);
         }
-        static void Init(Dictionary <int, Customer > customerDic)
+        static void Init(Dictionary<int, Customer> customerDic)
         {
             string customerFilePath = "customers.csv";
             string orderFilePath = "orders.csv";
@@ -129,26 +177,86 @@ namespace S10256965_PRG2Assignment
         // 3) Register a new customer
         static void AddNewCustomer(Dictionary<int, Customer> customerDic)
         {
-            // handle customers that already exist
-            Console.Write("Enter the name of the new customer: ");
-            string name = Console.ReadLine();
+            string name;
+            int id;
+            DateTime dob;
 
-            Console.Write("Enter the ID of the new customer: ");
-            string id = Console.ReadLine();
+            while (true)
+            {
+                Console.Write("Enter the name of the new customer: ");
+                string? input = Console.ReadLine();
 
-            Console.Write("Enter the Date of Birth of the new customer: ");
-            DateTime dob = DateTime.Parse(Console.ReadLine());
+                if (input == null)
+                {
+                    Console.WriteLine("Invalid, name should not be null.");
+                }
+                else if (customerDic.Select(obj => obj.Value.Name).Contains(input))
+                {
+                    Console.WriteLine("Invalid, name is already in the system.");
+                    Console.WriteLine("Try to enter your full name or an alias.");
+                }
+                else
+                {
+                    name = input;
+                    break;
+                }
+            }
 
+            while (true)
+            {
+                Console.Write("Enter the ID of the new customer: ");
+                string? input = Console.ReadLine();
+
+                if (input == null)
+                {
+                    Console.WriteLine("Invalid, id should not be null.");
+                }
+                else if (input.Length != 6)
+                {
+                    Console.WriteLine("Invalid, id should be 6 digits.");
+                }
+                else if (!int.TryParse(input, out id))
+                {
+                    Console.WriteLine("Invalid, id should be an integer.");
+                }
+                else if (customerDic.ContainsKey(id))
+                {
+                    Console.WriteLine("Invalid, id is already used in the system.");
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            while (true)
+            {
+                Console.Write("Enter the Date of Birth of the new customer: ");
+                string? input = Console.ReadLine();
+
+                if (input == null)
+                {
+                    Console.WriteLine("Invalid, date of birth should not be null.");
+                }
+                else if (!DateTime.TryParseExact(input, "dd/MM/yyyy", null, DateTimeStyles.None, out dob))
+                {
+                    Console.WriteLine("Invalid, date of birth should be a valid date.");
+                }
+                else
+                {
+                    break;
+                }
+            }
             Customer customer = new Customer(name, Convert.ToInt32(id), dob);
 
             PointCard pointCard = new PointCard(0, 0);
 
             customer.Rewards = pointCard;
 
-            Int32.TryParse(id, out int memberId);
-            customerDic.Add(memberId, customer);
+            customerDic.Add(id, customer);
 
-            File.AppendAllText("customers.csv", Environment.NewLine + name + "," + id + "," + dob.ToString("dd/mm/yyyy") + ", Ordinary, 0, 0");
+            string text = $"{name},{id},{dob.ToString("dd/MM/yyyy")},Ordinary,0,0";
+            File.AppendAllText("customers.csv", Environment.NewLine + text);
 
             Console.WriteLine("New customer added successfully.");
         }
@@ -164,26 +272,18 @@ namespace S10256965_PRG2Assignment
   
             Queue<Order> orders = regularQueue;
             Customer customer = customerDic.Values.ElementAt(option - 1);
+
+            Order order = customer.MakeOrder();
+
             if (customer.Rewards.Tier == "Gold")
             {
                 orders = goldQueue;
             }
-            // id in this case is the position in the queue
 
-            Order order = new Order(orders.Count + 1, DateTime.Now);
-            while (true)
-            {
-                IceCreamBuilder builder = new IceCreamBuilder();
-                order.AddIceCream(builder.GetIceCream());
-                Console.WriteLine("Would you like to add another ice cream to your order? [Y/N]");
-                string input = Console.ReadLine();
-                if (input == "N"){
-                    break;
-                }
-            }
             orders.Enqueue(order);
-            Console.WriteLine("Your order is successfull");
+            customer.CurrentOrder = order;
 
+            Console.WriteLine("Your order is successfull");
         }
 
         // 5) Display order details of a customer 
@@ -296,6 +396,12 @@ namespace S10256965_PRG2Assignment
             // Only go through regular queue if the gold queue is empty
             Queue<Order> queue = goldQueue.Count == 0 ? regularQueue : goldQueue;
 
+            if (queue.Count == 0)
+            {
+                Console.WriteLine("There are no customers in the queue.");
+                return;
+            }
+            
             Order order = queue.Dequeue();
 
             int idx = 1;
@@ -427,8 +533,4 @@ namespace S10256965_PRG2Assignment
 
         }
     }
-    
-
-
-
 }

@@ -29,7 +29,23 @@ namespace S10256965_PRG2Assignment
         }
         public Order MakeOrder() 
         {
-            return new Order();
+            DateTime now = DateTime.Now;
+            int id = now.Year * 10000 + now.Day * 1000 + now.Second * 100 + now.Microsecond;
+
+            Order order = new Order(id, now);
+
+            while (true)
+            {
+                IceCreamBuilder builder = new IceCreamBuilder();
+                order.AddIceCream(builder.GetIceCream());
+                Console.WriteLine("Would you like to add another ice cream to your order? [Y/N]");
+                string input = Console.ReadLine();
+                if (input == "N"){
+                    break;
+                }
+            }
+
+            return order;
         }
         public bool IsBirthday() 
         {
