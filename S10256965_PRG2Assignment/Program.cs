@@ -67,13 +67,13 @@ namespace S10256965_PRG2Assignment
                 {
                     ProcessOrder(customerDic, regularQueue, goldQueue); 
                 }
+                else if (option == 8)
+                {
+                    MonthlyBreakdown(customerDic);
+                }
                 else if (option == 9)
                 {
                     break;
-                }
-                else
-                {
-                    Console.WriteLine("Option 8??");
                 }
             }
             // 1) List all customers
@@ -493,6 +493,7 @@ namespace S10256965_PRG2Assignment
 
             order.TimeFulfilled = DateTime.Now;
 
+            customer.CurrentOrder = null;
             customer.OrderHistory.Add(order);
         }
         // 8) Dsiplay monthly charged amounts and total charged amounts for the year

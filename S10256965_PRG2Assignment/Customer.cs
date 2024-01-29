@@ -17,7 +17,7 @@ namespace S10256965_PRG2Assignment
         public string Name { get; set; }
         public int MemberId { get; set; }
         public DateTime Dob { get; set; }
-        public Order CurrentOrder { get; set; }
+        public Order? CurrentOrder { get; set; }
         public List<Order> OrderHistory = new List<Order>();
         public PointCard Rewards { get; set; }
         public Customer() { }

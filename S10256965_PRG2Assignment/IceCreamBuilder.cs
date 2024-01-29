@@ -58,6 +58,9 @@ namespace S10256965_PRG2Assignment
         }
         public void UpdateFlavours()
         {
+            // Reset flavours
+            HoldIceCream.Flavours = new List<Flavour>();
+
             string menuTitle = "Flavour options";
             string prompt = "You can choose a maximum of " + maxNoFlavours + ".\nEnter 's' if you would like to skip.";
 
@@ -107,6 +110,9 @@ namespace S10256965_PRG2Assignment
         }
         public void UpdateToppings()
         {
+            // Reset toppings 
+            HoldIceCream.Toppings = new List<Topping>();
+
             string menuTitle = "Topping options";
             string prompt = "You can choose a maximum of " + maxNoToppings + ".\nEnter 's' if you would like to skip.";
 
