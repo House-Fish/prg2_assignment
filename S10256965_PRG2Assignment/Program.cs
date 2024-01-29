@@ -22,50 +22,42 @@ namespace S10256965_PRG2Assignment
             Dictionary<int, Customer> customerDic = new Dictionary<int, Customer>();
             Queue<Order> regularQueue = new Queue<Order>();
             Queue<Order> goldQueue = new Queue<Order>();
-            string[] options = ["List all customers", 
-                "List all current orders of gold and ordinary members", 
-                "Register a new customer",
-                "Create a customer's order",
-                "Display order details of a customer",
-                "Modify order details",
-                "Process an order and checkout",
-                "Display monthly charged amounts breakdown & total charged amounts for the year",
-                "Exit"
-                ];
 
             Init(customerDic);
 
             while (true)
             {
-                int option = Helper.GetOption("Enter the option", options, "Enter option");
+                int option = Helper.GetOption("Enter the option", Helper.MainOptions, "Enter option");
+
+                Console.WriteLine($"\n{option}) {Helper.MainOptions[option-1]}:");
 
                 if (option == 1)
                 {
-                    DisplayAllCustomerDetails(customerDic); 
-                } 
+                    DisplayAllCustomerDetails(customerDic);
+                }
                 else if (option == 2)
                 {
-                    DisplayCurrentOrders(regularQueue, goldQueue); 
+                    DisplayCurrentOrders(regularQueue, goldQueue);
                 }
                 else if (option == 3)
                 {
-                    AddNewCustomer(customerDic); 
+                    AddNewCustomer(customerDic);
                 }
                 else if (option == 4)
                 {
-                    CreateCustomerOrder(customerDic, regularQueue, goldQueue); 
+                    CreateCustomerOrder(customerDic, regularQueue, goldQueue);
                 }
                 else if (option == 5)
                 {
-                    DisplayCustomersOrders(customerDic); 
+                    DisplayCustomersOrders(customerDic);
                 }
                 else if (option == 6)
                 {
-                    ModifyOrder(customerDic); 
+                    ModifyOrder(customerDic);
                 }
                 else if (option == 7)
                 {
-                    ProcessOrder(customerDic, regularQueue, goldQueue); 
+                    ProcessOrder(customerDic, regularQueue, goldQueue);
                 }
                 else if (option == 8)
                 {
@@ -73,55 +65,17 @@ namespace S10256965_PRG2Assignment
                 }
                 else if (option == 9)
                 {
+                    Console.WriteLine("See you again, cowboy!");
                     break;
                 }
+                else
+                {
+                    Console.WriteLine("Error, option has not been processed.");
+                }
+
+                // Spacer
+                Console.ReadLine();
             }
-            // 1) List all customers
-            // DisplayAllCustomerDetails(customerDic);
-
-            // 2) List all current orders of gold and ordinary members
-            // Test Case 
-            /*
-            int noRandom = random.Next(10);
-            for (int i = 0; i < noRandom; i++)
-            {
-                regularQueue.Enqueue(Helper.CreateRandomOrder());
-            }
-            noRandom = random.Next(10);
-            for (int i = 0; i < noRandom; i++)
-            {
-                goldQueue.Enqueue(Helper.CreateRandomOrder());
-            }
-            */
-            // DisplayCurrentOrders(regularQueue, goldQueue);
-
-            // 3) Register a new customer
-            // AddNewCustomer(customerDic);
-
-            // 4) Create a customer's order
-            // CreateCustomerOrder(customerDic, regularQueue, goldQueue);
-
-            // 5) Display order details of a customer
-            // DisplayCustomersOrders(customerDic);
-
-            // 6) Modify order details
-            // Test Case 
-            /*          
-            Customer customer = customerDic.ElementAt(0).Value;
-            customer.CurrentOrder = Helper.CreateRandomOrder();
-            */
-            // ModifyOrder(customerDic);
-
-            // 7) Process an order and checkout
-            // Test cases
-            /*
-            while (true)
-            {
-                Helper.AddRandomOrder(customerDic, goldQueue, regularQueue);
-                ProcessOrder(customerDic, regularQueue, goldQueue);
-            }
-            */
-            // ProcessOrder(customerDic, regularQueue, goldQueue);
         }
         static void Init(Dictionary<int, Customer> customerDic)
         {
@@ -157,6 +111,7 @@ namespace S10256965_PRG2Assignment
                 }
             }
 
+            // Spacer
             Console.WriteLine();
 
             idx = 1;
@@ -283,14 +238,15 @@ namespace S10256965_PRG2Assignment
             orders.Enqueue(order);
             customer.CurrentOrder = order;
 
-            Console.WriteLine("Your order is successfull");
+            Console.WriteLine("Your order is successful");
         }
 
         // 5) Display order details of a customer 
         static void DisplayCustomersOrders(Dictionary<int, Customer> customerDic)
         {
-            List<string> customerNames = customerDic.Select(kvp => kvp.Value.Name).ToList();
-            int option = Helper.GetOption("Enter the customer you would like", customerNames.ToArray(),
+            // Get just the names of customers 
+            string[] customerNames = customerDic.Select(kvp => kvp.Value.Name).ToArray();
+            int option = Helper.GetOption("Enter the customer you would like", customerNames,
                                           "Customer names");
 
             Customer customer = customerDic.ElementAt(option - 1).Value;
@@ -329,37 +285,37 @@ namespace S10256965_PRG2Assignment
         // 6) Modify order details 
         static void ModifyOrder(Dictionary<int, Customer> customerDic)
         {
-            // List & prompt user to select customer
-            List<string> customerNames = customerDic.Select(kvp => kvp.Value.Name).ToList();
-            int customerIdx = Helper.GetOption("Enter the customer you would like", customerNames.ToArray(), 
+            // Get just the names of customers 
+            string[] customerNames = customerDic.Select(kvp => kvp.Value.Name).ToArray();
+            int customerIdx = Helper.GetOption("Enter the customer you would like", customerNames, 
                 "Customer names");
 
             Customer customer = customerDic.ElementAt(customerIdx - 1).Value;
 
             // Get customers current order
-            Order currentOrder = customer.CurrentOrder;
+            Order? currentOrder = customer.CurrentOrder;
 
-            // List all the ice creams in the current order
             if (currentOrder == null)
             {
                 Console.WriteLine("Invalid option, {0} does not have any current orders.", customer.Name);
                 return;
             }
 
+            // List all the ice cream objects contained in the order
             Console.WriteLine("Current order:\n" + currentOrder.ToString());
 
-            // List & prompt user to select modify option
+            // Prompt the user on their action
             int optionIdx = Helper.GetOption("Enter the action you would like to take", Helper.ModifyOptions, 
                 "Possible actions");
 
-            List<IceCream> iceCreams = currentOrder.IceCreamList;
+            List<IceCream> iceCreamList = currentOrder.IceCreamList;
 
             // Modify ice cream
             if (optionIdx == 1)
             {
-                List<string> iceCreamDetails = iceCreams.Select(icecream => icecream.ToString()).ToList();
+                string[] iceCreamDetails = iceCreamList.Select(icecream => icecream.ToString()).ToArray();
                 int iceCreamIdx = Helper.GetOption("Enter the ice cream you would like to modify", 
-                                                    iceCreamDetails.ToArray(), "Ice creams");
+                                                    iceCreamDetails, "Ice creams");
 
                 currentOrder.ModifyIceCream(iceCreamIdx - 1);
             }
@@ -373,15 +329,15 @@ namespace S10256965_PRG2Assignment
             // Delete ice cream
             else
             {
-                if (iceCreams.Count < 2)
+                if (iceCreamList.Count < 2)
                 {
                     Console.WriteLine("Invalid option, you have to have a minimum of one ice cream");
                     return;
                 }
 
-                List<string> iceCreamDetails = iceCreams.Select(icecream => icecream.ToString()).ToList();
-                int iceCreamIdx = Helper.GetOption("Enter the ice cream you would like to modify",
-                                                    iceCreamDetails.ToArray(), "Ice creams");
+                string[] iceCreamDetails = iceCreamList.Select(icecream => icecream.ToString()).ToArray();
+                int iceCreamIdx = Helper.GetOption("Enter the ice cream you would like to delete",
+                                                    iceCreamDetails, "Ice creams");
 
                 currentOrder.DeleteIceCream(iceCreamIdx - 1);
             }
@@ -393,9 +349,10 @@ namespace S10256965_PRG2Assignment
         {
             double totalAmount;
 
-            // Only go through regular queue if the gold queue is empty
+            // Process regular queue if gold queue is empty
             Queue<Order> queue = goldQueue.Count == 0 ? regularQueue : goldQueue;
 
+            // Return if the queues are empty
             if (queue.Count == 0)
             {
                 Console.WriteLine("There are no customers in the queue.");
@@ -404,6 +361,7 @@ namespace S10256965_PRG2Assignment
             
             Order order = queue.Dequeue();
 
+            // Display all the ice creams in the order
             int idx = 1;
             Console.WriteLine("Items in the order: ");
             foreach (IceCream iceCream in order.IceCreamList)
@@ -412,9 +370,11 @@ namespace S10256965_PRG2Assignment
                 idx++;
             }
 
+            // Display the total bill amount
             totalAmount = order.CalculateTotal();
             Console.WriteLine("Total bill: " + totalAmount.ToString("0.00"));
 
+            // Get the customer object which has the order id
             Customer? customer = customerDic.Values
                 .FirstOrDefault(obj => obj?.CurrentOrder?.Id == order.Id);
 
@@ -424,18 +384,29 @@ namespace S10256965_PRG2Assignment
                 return;
             }
 
-            Console.WriteLine("Customer details:");
+            // Display the customers details
+            Console.WriteLine("\nCustomer details:");
             Console.WriteLine("Name: " + customer.Name);
             Console.WriteLine("Membership status: " + customer.Rewards.Tier);
             Console.WriteLine("Points: " + customer.Rewards.Points);
+            Console.WriteLine();
 
+            // Deduct most expensive ice cream if today is birthday
             if (customer.IsBirthday())
             {
-                IceCream expensiveIceCream = order.IceCreamList.Max();
-                totalAmount -= expensiveIceCream.CalculatePrice();
-                Console.WriteLine("Happy Birthday! Discounting the most expensive ice cream.");
+                IceCream? mostExpensiveIceCream = order.IceCreamList.Max();
+                if (mostExpensiveIceCream == null)
+                {
+                    Console.WriteLine("Unable to locate most expensive ice cream.");
+                }
+                else
+                {
+                    totalAmount -= mostExpensiveIceCream.CalculatePrice();
+                    Console.WriteLine("Happy Birthday! Discounting the most expensive ice cream.");
+                }
             }
 
+            // Deduct first ice cream if punch card full
             if (customer.Rewards.PunchCard == 10)
             {
                 IceCream firstIceCream = order.IceCreamList[0];
@@ -444,6 +415,7 @@ namespace S10256965_PRG2Assignment
                 Console.WriteLine("You have filled up your punch card! Discounting your first ice cream.");
             }
 
+            // Redeem points if Silver or Gold member
             if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold")
             {
                 int noPoints;
@@ -476,12 +448,16 @@ namespace S10256965_PRG2Assignment
             Console.Write("Enter any key to make payment: ");
             Console.ReadLine();
 
+            // Update punch card
             int punchCard = customer.Rewards.PunchCard;
-            int addition = order.IceCreamList.Count;
-            customer.Rewards.PunchCard = Math.Min(punchCard + addition, 10);
+            int noIceCreams = order.IceCreamList.Count;
 
-            customer.Rewards.AddPoints((int)Math.Floor(totalAmount * 0.72));
+            customer.Rewards.PunchCard = Math.Min(punchCard + noIceCreams, 10);
 
+            // Earn points
+            customer.Rewards.AddPoints(Convert.ToInt32(Math.Floor(totalAmount * 0.72)));
+
+            // Update member status
             if (customer.Rewards.Points >= 100)
             {
                 customer.Rewards.Tier = "Gold";

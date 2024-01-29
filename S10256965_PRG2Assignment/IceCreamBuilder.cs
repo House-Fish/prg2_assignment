@@ -174,7 +174,7 @@ namespace S10256965_PRG2Assignment
                 }
                 else
                 {
-                    Console.WriteLine("{} is an invalid option, enter 'Y' or 'N'.", input);
+                    Console.WriteLine("'{0}' is an invalid option, enter 'Y' or 'N'.", input);
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace S10256965_PRG2Assignment
                 }
                 else
                 {
-                    Console.WriteLine("{0} is an invalid option, enter 'Y' or 'N'.", input);
+                    Console.WriteLine("'{0}' is an invalid option, enter 'Y' or 'N'.", input);
                 }
             }
         }

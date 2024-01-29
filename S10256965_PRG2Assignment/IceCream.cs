@@ -14,11 +14,17 @@ namespace S10256965_PRG2Assignment
 {
     public abstract class IceCream : IComparable<IceCream>
     {
-        public string Option = "Cup"; 
+        public string Option { get; set; }
         public int Scoop { get; set; } 
-        public List<Flavour> Flavours = new List<Flavour>(); 
-        public List<Topping> Toppings = new List<Topping>();
-        public IceCream() { }
+        public List<Flavour> Flavours { get; set; }
+        public List<Topping> Toppings { get; set; }
+        public IceCream() 
+        {
+            Option = "Cup";
+            Scoop = 0;
+            Flavours = new List<Flavour>();
+            Toppings = new List<Topping>();
+        }
         public IceCream(string option, int scoop, List<Flavour> flavours, List<Topping> toppings) 
         { 
             Option = option;
@@ -27,9 +33,9 @@ namespace S10256965_PRG2Assignment
             Toppings = toppings;
         }
         public abstract double CalculatePrice();
-        public int CompareTo(IceCream oIceCream)
+        public int CompareTo(IceCream otherIceCream)
         {
-            return CalculatePrice().CompareTo(oIceCream.CalculatePrice());
+            return CalculatePrice().CompareTo(otherIceCream.CalculatePrice());
         }
         public override string ToString()
         {

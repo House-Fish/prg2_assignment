@@ -18,8 +18,21 @@ namespace S10256965_PRG2Assignment
 {
     public static class Helper
     {
+        // Option 6 
         public static string[] ModifyOptions = ["Modify existing ice cream", "Add new ice cream", "Delete existing ice cream"];
         public static string[] ModifyIceCreamOptions = ["Option", "Flavour", "Topping", "Add-on's", "Exit"];
+
+        // Main options 
+        public static string[] MainOptions = ["List all customers",
+            "List all current orders of gold and ordinary members",
+            "Register a new customer",
+            "Create a customer's order",
+            "Display order details of a customer",
+            "Modify order details",
+            "Process an order and checkout",
+            "Display monthly charged amounts breakdown & total charged amounts for the year",
+            "Exit"];
+
         public static void DisplayMenu(string[] options, string title)
         {
             int idx = 1;

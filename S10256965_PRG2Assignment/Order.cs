@@ -15,15 +15,19 @@ namespace S10256965_PRG2Assignment
 {
     public class Order
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public DateTime TimeReceived { get; set; }
         public DateTime? TimeFulfilled { get; set; }
-        public List<IceCream> IceCreamList = new List<IceCream>();
-        public Order() { }
+        public List<IceCream> IceCreamList { get; set; }
+        public Order() 
+        {
+            IceCreamList = new List<IceCream>();
+        }
         public Order(int id, DateTime timereceived)
         {
             Id = id;
             TimeReceived = timereceived;
+            IceCreamList = new List<IceCream>();
         }
         public void ModifyIceCream(int id) 
         {
