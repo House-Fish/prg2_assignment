@@ -135,7 +135,7 @@ namespace S10256965_PRG2Assignment
             string name;
             int id;
             DateTime dob;
-
+            
             while (true)
             {
                 Console.Write("Enter the name of the new customer: ");
@@ -472,11 +472,36 @@ namespace S10256965_PRG2Assignment
             customer.CurrentOrder = null;
             customer.OrderHistory.Add(order);
         }
-        // 8) Dsiplay monthly charged amounts and total charged amounts for the year
+        // 8) Display monthly charged amounts and total charged amounts for the year
         static void MonthlyBreakdown(Dictionary<int, Customer> customerDic)
         {
-            Console.Write("Enter the year: ");
-            DateTime input = new DateTime(Convert.ToInt32(Console.ReadLine()), 1, 1);
+            int year;
+            while (true)
+            {
+                Console.Write("Enter the year: ");
+                string input = Console.ReadLine();
+                
+                // Check if the input can be parsed as an integer
+                if (int.TryParse(input, out year))
+                {
+                    // Check if the year is within a reasonable range
+                    if (year >= 2000 && year <= DateTime.Now.Year)
+                    {
+                        break; // Exit the loop if a valid year is entered
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a valid 4-digit year.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid integer.");
+                }
+            }
+
+        
+
 
             Dictionary<int, double> incomeDic = new Dictionary<int, double>();
             for (int i = 1; i < 13; i++)
@@ -484,7 +509,7 @@ namespace S10256965_PRG2Assignment
                 incomeDic.Add(i, 0);
             }
 
-            // find the year and month the order was finished \
+            // find the year and month the order was finished 
             // two loops
             // first loop goes through all the customers and accesses the OrderHistory from the customerDic 
             // second loop selects the orders based off of the year the user input
@@ -496,16 +521,17 @@ namespace S10256965_PRG2Assignment
                 {
                     DateTime timeFulfilled = (DateTime)(order.TimeFulfilled);
 
-                    if (timeFulfilled.Year == input.Year)
+                    if (timeFulfilled.Year == year)
                     {
                         incomeDic[timeFulfilled.Month] += order.CalculateTotal();
                     }
                 }
             }
 
-            foreach (KeyValuePair<int, double> kvp in incomeDic ) 
-            { 
-                Console.WriteLine(kvp.Key.ToString() + ": " + kvp.Value.ToString());
+            foreach (KeyValuePair<int, double> kvp in incomeDic)
+            {
+                string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(kvp.Key);
+                Console.WriteLine(monthName + ": " + kvp.Value.ToString());
             }
 
         }
