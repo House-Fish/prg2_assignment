@@ -381,7 +381,7 @@ namespace S10256965_PRG2Assignment
 
             // Display the total bill amount
             totalAmount = order.CalculateTotal();
-            Console.WriteLine("Total bill: " + totalAmount.ToString("0.00"));
+            Console.WriteLine("Total bill: $" + totalAmount.ToString("0.00"));
 
             // Get the customer object which has the order id
             Customer? customer = customerDic.Values
