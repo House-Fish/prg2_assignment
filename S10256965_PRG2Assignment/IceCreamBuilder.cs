@@ -14,6 +14,19 @@ namespace S10256965_PRG2Assignment
 {
     public class IceCreamBuilder
     {
+        /* 
+         * This class implements the builder design pattern to create an ice cream
+         * by its parts. 
+         * 
+         * When creating a new icecream, call the constructor without passing in any
+         * ice cream, it will create a new ice cream within the constructor.
+         * 
+         * When modifying an icecream, call the constructor, passing in an existing icecream
+         * then call the neccessary methods to update the values.
+         * 
+         * When you are done, call the update flavours method to get the icecream from the
+         * builder. 
+         */
         private IceCream HoldIceCream { get; set; }
         public static readonly string[] OptionNames = ["Cup", "Cone", "Waffle"];
         public static readonly string[] FlavourNames = ["Chocolate", "Vanilla", "Strawberry", "Durian", "Ube", "Sea Salt"];

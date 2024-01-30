@@ -18,11 +18,17 @@ namespace S10256965_PRG2Assignment
 {
     public static class Helper
     {
-        // Option 6 
+        /*
+         * This class contains a group of helper methods which 
+         * can be used throughout the project.
+         * 
+         * The methods are static, allowing them to be called 
+         * without creating an object.
+         */
+        public static string[] membershipStatuses = ["Ordinary", "Silver", "Gold"];
         public static string[] ModifyOptions = ["Modify existing ice cream", "Add new ice cream", "Delete existing ice cream"];
         public static string[] ModifyIceCreamOptions = ["Option", "Flavour", "Topping", "Add-on's", "Exit"];
 
-        // Main options 
         public static string[] MainOptions = ["List all customers",
             "List all current orders of gold and ordinary members",
             "Register a new customer",
@@ -90,22 +96,25 @@ namespace S10256965_PRG2Assignment
                     // Read and ignore the header line
                     sr.ReadLine();
 
+                    int idx = 0;
+
                     string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
+                        idx++;
+
                         string[] data = line.Split(',');
 
                         if (data.Length != 6)
                         {
-                            Console.WriteLine($"Invalid, {data.Length} values passed.");
-                            continue;
+                            throw new Exception($"{data.Length} values found on the {idx} line.");
                         }
 
                         Customer? customer = TryParseCustomer(data);
 
                         if (customer == null)
                         {
-                            throw new Exception("Failed to parse customer, skipping customer.");
+                            throw new Exception($"Failed to parse customer on the {idx} line.");
                         }
 
                         customerDic.Add(customer.MemberId, customer);
@@ -142,27 +151,31 @@ namespace S10256965_PRG2Assignment
                 memberId = Convert.ToInt32(data[1]);
                 dob = Convert.ToDateTime(data[2]);
                 membershipStatus = data[3];
+                if (!membershipStatuses.Contains(membershipStatus))
+                {
+                    throw new Exception("Invalid membership status value");
+                }
                 points = Convert.ToInt32(data[4]);
                 punchCard = Convert.ToInt32(data[5]);
             }
             catch (FormatException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Unable to parse value: {ex.Message}");
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
+                Console.WriteLine($"Unexpected error while parsing value: {ex.Message}");
                 return null;
             }
 
             // Create PointCard and Customer from values found
             PointCard pointCard = new PointCard(points, punchCard)
             {
-                Tier = data[3]
+                Tier = membershipStatus
             };
 
-            Customer customer = new Customer(data[0], memberId, dob)
+            Customer customer = new Customer(name, memberId, dob)
             {
                 Rewards = pointCard
             };
@@ -178,20 +191,23 @@ namespace S10256965_PRG2Assignment
                     // Read and ignore the header line
                     sr.ReadLine();
 
+                    int idx = 0;
+
                     string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         string[] data = line.Split(',');
 
+                        idx++;
+
                         if (data.Length != 15)
                         {
-                            Console.WriteLine($"Invalid, {data.Length} values passed.");
-                            return false;
+                            throw new Exception($"{data.Length} values found on the {idx} line.");
                         }
 
                         if (!TryParseOrder(data, customerDic))
                         {
-                            throw new Exception("Failed to parse order, skipping order.");
+                            throw new Exception($"Failed to parse order on the {idx} line.");
                         }
                     }
                 }
@@ -207,7 +223,6 @@ namespace S10256965_PRG2Assignment
                 Console.WriteLine($"Error reading file: {ex.Message}");
                 return false;
             }
-
         }
         public static bool TryParseOrder(string[] data, Dictionary<int, Customer> customerDic)
         {
@@ -262,6 +277,10 @@ namespace S10256965_PRG2Assignment
                     {
                         break;
                     }
+                    else if (!IceCreamBuilder.FlavourNames.Contains(flavour))
+                    {
+                        throw new Exception("Invalid flavour");
+                    }
                     else if (flavours.Any(obj => obj.Type == flavour))
                     {
                         flavours.First(obj => obj.Type == flavour).Quantity++;
@@ -279,6 +298,10 @@ namespace S10256965_PRG2Assignment
                     {
                         break;
                     }
+                    else if (!IceCreamBuilder.ToppingNames.Contains(topping))
+                    {
+                        throw new Exception("Invalid topping");
+                    }
                     else
                     {
                         toppings.Add(new Topping(topping));
@@ -287,14 +310,12 @@ namespace S10256965_PRG2Assignment
             }
             catch (FormatException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine($"Unable to parse value: {ex.Message}");
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine($"Unexpected error while parsing value: {ex.Message}");
                 return false;
             }
 
@@ -375,6 +396,7 @@ namespace S10256965_PRG2Assignment
                 iceCream = builder.GetIceCream();
             }
         }
+        // Below are helper methods used for testing
         public static Order CreateRandomOrder()
         {
             Random rand = new Random();

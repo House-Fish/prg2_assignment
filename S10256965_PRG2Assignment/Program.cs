@@ -82,8 +82,11 @@ namespace S10256965_PRG2Assignment
             string customerFilePath = "customers.csv";
             string orderFilePath = "orders.csv";
 
-            Helper.TryInitializeCustomers(customerDic, customerFilePath);
-            Helper.TryInitalizeOrders(customerDic, orderFilePath);
+            if (!Helper.TryInitializeCustomers(customerDic, customerFilePath) || 
+                !Helper.TryInitalizeOrders(customerDic, orderFilePath))
+            {
+                Console.WriteLine("Data has not been read properly, program may not run as expected.\n");
+            }
         }
         // 1) List all customers
         static void DisplayAllCustomerDetails(Dictionary<int, Customer> customerDic)
@@ -211,7 +214,7 @@ namespace S10256965_PRG2Assignment
             customerDic.Add(id, customer);
 
             string text = $"{name},{id},{dob.ToString("dd/MM/yyyy")},Ordinary,0,0";
-            File.AppendAllText("customers.csv", Environment.NewLine + text);
+            File.AppendAllText("customers.csv", text + Environment.NewLine);
 
             Console.WriteLine("New customer added successfully.");
         }
@@ -413,7 +416,7 @@ namespace S10256965_PRG2Assignment
             }
 
             // Deduct first ice cream if punch card full
-            if (customer.Rewards.PunchCard == 10)
+            if (customer.Rewards.PunchCard == 10 && totalAmount > 0)
             {
                 IceCream firstIceCream = order.IceCreamList[0];
                 totalAmount -= firstIceCream.CalculatePrice();
@@ -422,7 +425,7 @@ namespace S10256965_PRG2Assignment
             }
 
             // Redeem points if Silver or Gold member
-            if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold")
+            if ((customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold") && totalAmount > 0)
             {
                 int noPoints;
                 while (true)
@@ -449,7 +452,7 @@ namespace S10256965_PRG2Assignment
                 Console.WriteLine($"Discounted ${discount.ToString("0.00")}.");
             }
 
-            Console.WriteLine("Final total bill: " + totalAmount.ToString("0.00"));
+            Console.WriteLine("Final total bill: $" + totalAmount.ToString("0.00"));
 
             Console.Write("Enter any key to make payment: ");
             Console.ReadLine();

@@ -39,26 +39,26 @@ namespace S10256965_PRG2Assignment
 
             Order order = new Order(id, now);
 
-            bool isValid = true;
+            bool anotherIceCream = true;
 
-            while (isValid)
+            while (anotherIceCream)
             {
                 IceCreamBuilder builder = new IceCreamBuilder();
                 order.AddIceCream(builder.GetIceCream());
 
-                while (isValid)
+                while (true)
                 {
                     Console.WriteLine("Would you like to add another ice cream to your order? [Y/N]");
                     string? input = Console.ReadLine();
-                    if (input == "N")
+                    if (input == "N" || input == "Y")
                     {
-                        isValid = false;
+                        anotherIceCream = input == "Y";
+                        break;
                     }
-                    else if (input != "Y")
+                    else
                     {
                         Console.WriteLine("'{0}' is an invalid option, enter either 'Y' or 'N'.", input);
                     }
-
                 }
             }
 
