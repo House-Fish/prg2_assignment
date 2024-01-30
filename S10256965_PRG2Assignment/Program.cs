@@ -228,6 +228,12 @@ namespace S10256965_PRG2Assignment
             Queue<Order> orders = regularQueue;
             Customer customer = customerDic.Values.ElementAt(option - 1);
 
+            if (customer.CurrentOrder != null)
+            {
+                Console.WriteLine("Invalid option, process the customers current order before adding a new order.");
+                return;
+            }
+
             Order order = customer.MakeOrder();
 
             if (customer.Rewards.Tier == "Gold")
@@ -499,9 +505,6 @@ namespace S10256965_PRG2Assignment
                     Console.WriteLine("Invalid input. Please enter a valid integer.");
                 }
             }
-
-        
-
 
             Dictionary<int, double> incomeDic = new Dictionary<int, double>();
             for (int i = 1; i < 13; i++)

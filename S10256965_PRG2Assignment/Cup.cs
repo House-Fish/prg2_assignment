@@ -20,12 +20,24 @@ namespace S10256965_PRG2Assignment
         public override double CalculatePrice() 
         {
             // Calculate the base price based on the number of scoops
-            double price = Scoop == 1 ? 4.00 : 3.50 + Scoop;
+            double price; 
+            if (Scoop == 0)
+            {
+                price = 2;
+            }
+            else if (Scoop > 1)
+            {
+                price = 3.50 + Scoop;
+            }
+            else
+            {
+                price = 4.00;
+            }
 
             // Add on the premium flavours cost
             foreach (Flavour f in Flavours)
             {
-                if (f.Premium) { price += 2; }
+                if (f.Premium) { price += f.Quantity * 2; }
             }
 
             // Add the cost of the toppings

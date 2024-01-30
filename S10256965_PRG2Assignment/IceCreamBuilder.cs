@@ -98,6 +98,7 @@ namespace S10256965_PRG2Assignment
                         {
                             flavourExits = true;
                             flav.Quantity++;
+                            break;
                         }
                     }
                     if (!flavourExits)
@@ -105,6 +106,7 @@ namespace S10256965_PRG2Assignment
                         bool premium = PremiumFlavourNames.Contains(flavour);
                         HoldIceCream.Flavours.Add(new Flavour(flavour, premium, 1));
                     }
+                    HoldIceCream.Scoop += 1;
                 }
             }
         }
