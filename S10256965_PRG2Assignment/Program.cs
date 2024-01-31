@@ -169,9 +169,9 @@ namespace S10256965_PRG2Assignment
                 {
                     Console.WriteLine("Invalid, id should not be null.");
                 }
-                else if ((!int.TryParse(input, out id)) || input.Length != 6)
+                else if ((!int.TryParse(input, out id)) || input.Length != 6 || id < 100000 || id > 999999)
                 {
-                    Console.WriteLine("Invalid, id should be a 6 digit integer.");
+                    Console.WriteLine("Invalid, id should be a 6 digit integer between 100000 and 999999.");
                 }
                 
                 else if (customerDic.ContainsKey(id))
