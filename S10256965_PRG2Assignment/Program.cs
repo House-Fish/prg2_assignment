@@ -142,11 +142,11 @@ namespace S10256965_PRG2Assignment
             while (true)
             {
                 Console.Write("Enter the name of the new customer: ");
-                string? input = Console.ReadLine();
+                string? input = Console.ReadLine()?.Trim();
 
-                if (input == null)
+                if (string.IsNullOrWhiteSpace(input))
                 {
-                    Console.WriteLine("Invalid, name should not be null.");
+                    Console.WriteLine("Invalid, name should not be blank.");
                 }
                 else if (customerDic.Select(obj => obj.Value.Name).Contains(input))
                 {
@@ -155,7 +155,7 @@ namespace S10256965_PRG2Assignment
                 }
                 else
                 {
-                    name = input;
+                    name = input.Replace(',', ';');
                     break;
                 }
             }
@@ -165,18 +165,15 @@ namespace S10256965_PRG2Assignment
                 Console.Write("Enter the ID of the new customer: ");
                 string? input = Console.ReadLine();
 
-                if (input == null)
+                if (string.IsNullOrWhiteSpace(input))
                 {
                     Console.WriteLine("Invalid, id should not be null.");
                 }
-                else if (input.Length != 6)
+                else if (input.Length != 6 || !int.TryParse(input, out id))
                 {
-                    Console.WriteLine("Invalid, id should be 6 digits.");
+                    Console.WriteLine("Invalid, id should be a 6 digit integer.");
                 }
-                else if (!int.TryParse(input, out id))
-                {
-                    Console.WriteLine("Invalid, id should be an integer.");
-                }
+                
                 else if (customerDic.ContainsKey(id))
                 {
                     Console.WriteLine("Invalid, id is already used in the system.");
@@ -205,7 +202,7 @@ namespace S10256965_PRG2Assignment
                     break;
                 }
             }
-            Customer customer = new Customer(name, Convert.ToInt32(id), dob);
+            Customer customer = new Customer(name, id, dob);
 
             PointCard pointCard = new PointCard(0, 0);
 
@@ -213,7 +210,7 @@ namespace S10256965_PRG2Assignment
 
             customerDic.Add(id, customer);
 
-            string text = $"{name},{id},{dob.ToString("dd/MM/yyyy")},Ordinary,0,0";
+            string text = $"{name.Replace(',', ';')},{id},{dob.ToString("dd/MM/yyyy")},Ordinary,0,0";
             File.AppendAllText("customers.csv", text + Environment.NewLine);
 
             Console.WriteLine("New customer added successfully.");
