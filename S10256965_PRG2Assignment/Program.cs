@@ -169,7 +169,7 @@ namespace S10256965_PRG2Assignment
                 {
                     Console.WriteLine("Invalid, id should not be null.");
                 }
-                else if (input.Length != 6 || !int.TryParse(input, out id))
+                else if ((!int.TryParse(input, out id)) || input.Length != 6)
                 {
                     Console.WriteLine("Invalid, id should be a 6 digit integer.");
                 }
